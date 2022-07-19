@@ -10,6 +10,7 @@ This plugin aids players in combat with various useful features. Currently offer
 * Teleport to house hotkey
 * Prayer flicking and swapping
     * Hotkeys
+    * Alchemical Hydra
     * Cerberus
     * Demonic Gorillas
     * Jad
@@ -18,13 +19,13 @@ This plugin aids players in combat with various useful features. Currently offer
     * Can swap gear along with prayers
     * Automatically when target changed prayer
     * Hotkeys
+    * Demonic Gorillas
     * Zulrah
 
 ## Dependencies
 
 The plugin won't work without these dependencies.
 
-* [Cerberus](https://github.com/xKylee/plugins-release)
-* [Interaction](https://github.com/unethicalite/unethicalite)
 * [Item Stats](https://github.com/runelite/runelite)
-* [Zulrah](https://github.com/xKylee/plugins-release)
+
+All other dependencies should be included in this repo.
