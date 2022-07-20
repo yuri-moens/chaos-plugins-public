@@ -25,15 +25,15 @@ public class Predicates {
   }
 
   public static <T extends Item> Predicate<T> itemConfigList(ConfigList configList) {
-    Predicate<T> nameablePredicate = names(configList.getStrings());
-    Predicate<T> identifiablePredicate = ids(configList.getIntegers());
+    Predicate<T> nameablePredicate = names(configList.getStrings().keySet());
+    Predicate<T> identifiablePredicate = ids(configList.getIntegers().keySet());
 
     return nameablePredicate.or(identifiablePredicate);
   }
 
   public static <T extends SceneEntity> Predicate<T> entityConfigList(ConfigList configList) {
-    Predicate<T> nameablePredicate = names(configList.getStrings());
-    Predicate<T> identifiablePredicate = ids(configList.getIntegers());
+    Predicate<T> nameablePredicate = names(configList.getStrings().keySet());
+    Predicate<T> identifiablePredicate = ids(configList.getIntegers().keySet());
 
     return nameablePredicate.or(identifiablePredicate);
   }

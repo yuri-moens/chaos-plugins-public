@@ -1,20 +1,23 @@
 package io.reisub.unethicalite.utils.api;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.Getter;
 
 public class ConfigList {
-  @Getter private final Set<Integer> integers;
-  @Getter private final Set<String> strings;
+
+  @Getter
+  private final Map<Integer, Integer> integers;
+  @Getter
+  private final Map<String, Integer> strings;
 
   private ConfigList() {
-    integers = new LinkedHashSet<>();
-    strings = new LinkedHashSet<>();
+    integers = new LinkedHashMap<>();
+    strings = new LinkedHashMap<>();
   }
 
   public static ConfigList parseList(String list) {
-    ConfigList configList = new ConfigList();
+    final ConfigList configList = new ConfigList();
 
     for (String string : list.split("[\\n;,]")) {
       if (string.equals("")) {
@@ -23,11 +26,18 @@ public class ConfigList {
 
       // get rid of any comments and trim what's left
       string = string.split("//")[0].trim();
+      int amount = 1;
+
+      if (string.contains(":")) {
+        final String[] splitString = string.split(":");
+        amount = Integer.parseInt(splitString[1]);
+        string = splitString[0];
+      }
 
       try {
-        configList.integers.add(Integer.parseInt(string));
+        configList.integers.put(Integer.parseInt(string), amount);
       } catch (NumberFormatException e) {
-        configList.strings.add(string);
+        configList.strings.put(string, amount);
       }
     }
 
