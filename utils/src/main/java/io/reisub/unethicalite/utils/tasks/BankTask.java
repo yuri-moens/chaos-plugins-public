@@ -1,14 +1,16 @@
 package io.reisub.unethicalite.utils.tasks;
 
 import io.reisub.unethicalite.utils.Constants;
-import io.reisub.unethicalite.utils.api.Predicates;
+import io.reisub.unethicalite.utils.api.ConfigList;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 import net.runelite.api.Item;
 import net.runelite.api.ItemID;
 import net.runelite.api.NPC;
 import net.runelite.api.TileObject;
 import net.runelite.api.widgets.WidgetID;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
@@ -16,6 +18,7 @@ import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.GameThread;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
+import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.packets.DialogPackets;
 import net.unethicalite.api.widgets.Widgets;
@@ -228,5 +231,22 @@ public abstract class BankTask extends Task {
 
   protected NPC getBankNpc() {
     return NPCs.getNearest(Predicates.ids(Constants.BANK_NPC_IDS));
+  }
+
+  protected boolean hasEverythingInInventory(ConfigList list) {
+    for (Map.Entry<Integer, Integer> entry : list.getIntegers().entrySet()) {
+      if (Inventory.getCount(entry.getKey()) < entry.getValue()) {
+        return false;
+      }
+    }
+
+    for (Map.Entry<String, Integer> entry : list.getStrings().entrySet()) {
+      if (Inventory.getCount(Predicates.nameContains(entry.getKey(), false))
+          < entry.getValue()) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
