@@ -133,16 +133,16 @@ public class SwapHelper extends Helper {
 
       switch (style) {
         case MELEE:
-          ids = meleeList.getIntegers();
-          names = meleeList.getStrings();
+          ids = meleeList.getIntegers().keySet();
+          names = meleeList.getStrings().keySet();
           break;
         case RANGE:
-          ids = rangedList.getIntegers();
-          names = rangedList.getStrings();
+          ids = rangedList.getIntegers().keySet();
+          names = rangedList.getStrings().keySet();
           break;
         case MAGIC:
-          ids = magicList.getIntegers();
-          names = magicList.getStrings();
+          ids = magicList.getIntegers().keySet();
+          names = magicList.getStrings().keySet();
           break;
         default:
           ids = null;

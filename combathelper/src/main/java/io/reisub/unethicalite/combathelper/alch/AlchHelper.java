@@ -38,7 +38,7 @@ public class AlchHelper extends Helper {
           String name = i.getName();
 
           if (configBlacklist != null && !configBlacklist.getStrings().isEmpty()) {
-            for (String blacklistName : configBlacklist.getStrings()) {
+            for (String blacklistName : configBlacklist.getStrings().keySet()) {
               if (name.contains(blacklistName)) {
                 return false;
               }
@@ -49,7 +49,7 @@ public class AlchHelper extends Helper {
             return false;
           }
 
-          for (String n : configList.getStrings()) {
+          for (String n : configList.getStrings().keySet()) {
             if (name.contains(n)) {
               return true;
             }
