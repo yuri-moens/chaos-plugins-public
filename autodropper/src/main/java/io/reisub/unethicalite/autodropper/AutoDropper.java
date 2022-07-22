@@ -2,8 +2,8 @@ package io.reisub.unethicalite.autodropper;
 
 import com.google.inject.Provides;
 import io.reisub.unethicalite.utils.Utils;
+import io.reisub.unethicalite.utils.api.ChaosPredicates;
 import io.reisub.unethicalite.utils.api.ConfigList;
-import io.reisub.unethicalite.utils.api.Predicates;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Locale;
@@ -102,7 +102,7 @@ public class AutoDropper extends Plugin implements KeyListener {
   public void keyReleased(KeyEvent e) {}
 
   private void drop() {
-    List<Item> items = Inventory.getAll(Predicates.itemConfigList(configList));
+    List<Item> items = Inventory.getAll(ChaosPredicates.itemConfigList(configList));
 
     for (Item item : items) {
       item.interact("Drop");

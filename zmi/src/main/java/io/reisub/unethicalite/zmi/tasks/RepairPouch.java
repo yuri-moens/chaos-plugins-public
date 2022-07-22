@@ -1,11 +1,11 @@
 package io.reisub.unethicalite.zmi.tasks;
 
 import io.reisub.unethicalite.utils.Constants;
-import io.reisub.unethicalite.utils.api.Predicates;
 import io.reisub.unethicalite.utils.tasks.Task;
 import net.runelite.api.DialogOption;
 import net.runelite.api.ItemID;
 import net.runelite.api.widgets.Widget;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Inventory;

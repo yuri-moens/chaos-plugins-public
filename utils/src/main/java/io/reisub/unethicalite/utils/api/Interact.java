@@ -3,6 +3,7 @@ package io.reisub.unethicalite.utils.api;
 import java.util.Collection;
 import java.util.function.Predicate;
 import net.runelite.api.Item;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Equipment;

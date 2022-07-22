@@ -32,7 +32,7 @@ public class ChaosBank {
   public static void depositAll(boolean delay, Predicate<Item> filter) {
     Set<Item> items =
         Bank.Inventory.getAll(filter).stream()
-            .filter(Predicates.distinctByProperty(Item::getId))
+            .filter(ChaosPredicates.distinctByProperty(Item::getId))
             .collect(Collectors.toSet());
 
     items.forEach(

@@ -3,6 +3,7 @@ package io.reisub.unethicalite.combathelper.swap;
 import com.openosrs.client.util.WeaponStyle;
 import io.reisub.unethicalite.combathelper.Helper;
 import io.reisub.unethicalite.combathelper.prayer.PrayerHelper;
+import io.reisub.unethicalite.utils.api.ChaosPredicates;
 import io.reisub.unethicalite.utils.api.ConfigList;
 import io.reisub.unethicalite.utils.enums.ChaosPrayer;
 import java.awt.event.KeyEvent;
@@ -24,6 +25,7 @@ import net.unethicalite.api.items.Inventory;
 
 @Singleton
 public class SwapHelper extends Helper {
+
   @Inject
   private PrayerHelper prayerHelper;
 
@@ -128,38 +130,24 @@ public class SwapHelper extends Helper {
 
   public void swap(boolean offensivePrayers, boolean defensivePrayers, WeaponStyle... styles) {
     for (WeaponStyle style : styles) {
-      Set<Integer> ids;
-      Set<String> names;
+      ConfigList configList;
 
       switch (style) {
         case MELEE:
-          ids = meleeList.getIntegers().keySet();
-          names = meleeList.getStrings().keySet();
+          configList = meleeList;
           break;
         case RANGE:
-          ids = rangedList.getIntegers().keySet();
-          names = rangedList.getStrings().keySet();
+          configList = rangedList;
           break;
         case MAGIC:
-          ids = magicList.getIntegers().keySet();
-          names = magicList.getStrings().keySet();
+          configList = magicList;
           break;
         default:
-          ids = null;
-          names = null;
+          configList = null;
       }
 
-      List<Item> items =
-          Inventory.getAll(
-              i -> {
-                for (String name : names) {
-                  if (i.getName().contains(name)) {
-                    return true;
-                  }
-                }
-
-                return ids.contains(i.getId());
-              });
+      final List<Item> items =
+          Inventory.getAll(ChaosPredicates.itemConfigList(configList, true, false));
 
       if (!items.isEmpty()) {
         for (Item item : items) {

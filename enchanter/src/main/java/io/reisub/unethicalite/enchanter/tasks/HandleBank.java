@@ -5,12 +5,12 @@ import io.reisub.unethicalite.enchanter.Config;
 import io.reisub.unethicalite.enchanter.EnchantItem;
 import io.reisub.unethicalite.enchanter.Enchanter;
 import io.reisub.unethicalite.utils.api.ChaosBank;
-import io.reisub.unethicalite.utils.api.Predicates;
 import io.reisub.unethicalite.utils.tasks.BankTask;
 import java.time.Duration;
 import java.util.Set;
 import javax.inject.Inject;
 import net.runelite.api.ItemID;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Inventory;
 

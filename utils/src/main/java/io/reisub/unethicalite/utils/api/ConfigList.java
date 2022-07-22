@@ -43,4 +43,8 @@ public class ConfigList {
 
     return configList;
   }
+
+  public boolean isEmpty() {
+    return strings.isEmpty() && integers.isEmpty();
+  }
 }

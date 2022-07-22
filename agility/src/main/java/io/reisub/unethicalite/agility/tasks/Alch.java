@@ -2,8 +2,8 @@ package io.reisub.unethicalite.agility.tasks;
 
 import io.reisub.unethicalite.agility.Agility;
 import io.reisub.unethicalite.agility.Config;
+import io.reisub.unethicalite.utils.api.ChaosPredicates;
 import io.reisub.unethicalite.utils.api.ConfigList;
-import io.reisub.unethicalite.utils.api.Predicates;
 import io.reisub.unethicalite.utils.tasks.Task;
 import javax.inject.Inject;
 import net.runelite.api.Item;
@@ -46,7 +46,7 @@ public class Alch extends Task {
 
     return canCast()
         && SpellBook.Standard.HIGH_LEVEL_ALCHEMY.canCast()
-        && Inventory.contains(Predicates.itemConfigList(configList));
+        && Inventory.contains(ChaosPredicates.itemConfigList(configList));
   }
 
   @Override
@@ -57,7 +57,7 @@ public class Alch extends Task {
       Time.sleepTick();
     }
 
-    final Item item = Inventory.getFirst(Predicates.itemConfigList(configList));
+    final Item item = Inventory.getFirst(ChaosPredicates.itemConfigList(configList));
 
     if (item == null) {
       return;
