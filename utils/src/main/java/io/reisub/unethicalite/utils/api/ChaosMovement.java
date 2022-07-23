@@ -184,16 +184,14 @@ public class ChaosMovement {
       return teleportThroughPortalNexus(houseTeleport);
     }
 
-    switch (houseTeleport.getItem()) {
-      case JEWELLERY_BOX:
-      case DIGSITE_PENDANT:
-        return teleportThroughItem(houseTeleport);
-      default:
-        if (TileObjects.getNearest(houseTeleport.getPortalId()) != null) {
-          return teleportThroughPortal(houseTeleport);
-        } else {
-          return teleportThroughPortalNexus(houseTeleport);
-        }
+    if (houseTeleport.getItem() == null) {
+      if (TileObjects.getNearest(houseTeleport.getPortalId()) != null) {
+        return teleportThroughPortal(houseTeleport);
+      } else {
+        return teleportThroughPortalNexus(houseTeleport);
+      }
+    } else {
+      return teleportThroughItem(houseTeleport);
     }
   }
 
