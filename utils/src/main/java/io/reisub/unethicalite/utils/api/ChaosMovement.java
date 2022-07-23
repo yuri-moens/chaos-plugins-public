@@ -2,7 +2,8 @@ package io.reisub.unethicalite.utils.api;
 
 import com.google.common.collect.Sets;
 import io.reisub.unethicalite.utils.Constants;
-import io.reisub.unethicalite.utils.enums.PortalTeleport;
+import io.reisub.unethicalite.utils.enums.HouseTeleport;
+import io.reisub.unethicalite.utils.enums.HouseTeleport.TeleportItem;
 import java.util.Set;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemID;
@@ -156,19 +157,19 @@ public class ChaosMovement {
         && TileObjects.getNearest(ObjectID.PORTAL_4525) != null, 10);
   }
 
-  public static boolean teleportThroughHouse(PortalTeleport portalTeleport) {
-    return teleportThroughHouse(portalTeleport, false);
+  public static boolean teleportThroughHouse(HouseTeleport houseTeleport) {
+    return teleportThroughHouse(houseTeleport, false);
   }
 
-  public static boolean teleportThroughHouse(PortalTeleport portalTeleport, int energyThreshold) {
-    return teleportThroughHouse(portalTeleport, false, energyThreshold);
+  public static boolean teleportThroughHouse(HouseTeleport houseTeleport, int energyThreshold) {
+    return teleportThroughHouse(houseTeleport, false, energyThreshold);
   }
 
-  public static boolean teleportThroughHouse(PortalTeleport portalTeleport, boolean forceNexus) {
-    return teleportThroughHouse(portalTeleport, forceNexus, 30);
+  public static boolean teleportThroughHouse(HouseTeleport houseTeleport, boolean forceNexus) {
+    return teleportThroughHouse(houseTeleport, forceNexus, 30);
   }
 
-  public static boolean teleportThroughHouse(PortalTeleport portalTeleport,
+  public static boolean teleportThroughHouse(HouseTeleport houseTeleport,
       boolean forceNexus, int energyThreshold) {
     if (!Static.getClient().isInInstancedRegion()) {
       if (!teleportToHouse()) {
@@ -180,17 +181,18 @@ public class ChaosMovement {
     drinkFromPool(energyThreshold);
 
     if (forceNexus) {
-      return teleportThroughPortalNexus(portalTeleport);
+      return teleportThroughPortalNexus(houseTeleport);
     }
 
-    switch (portalTeleport) {
-      case FOSSIL_ISLAND:
-        return teleportThroughDigsitePendant(portalTeleport);
+    switch (houseTeleport.getItem()) {
+      case JEWELLERY_BOX:
+      case DIGSITE_PENDANT:
+        return teleportThroughItem(houseTeleport);
       default:
-        if (TileObjects.getNearest(portalTeleport.getPortalId()) != null) {
-          return teleportThroughPortal(portalTeleport);
+        if (TileObjects.getNearest(houseTeleport.getPortalId()) != null) {
+          return teleportThroughPortal(houseTeleport);
         } else {
-          return teleportThroughPortalNexus(portalTeleport);
+          return teleportThroughPortalNexus(houseTeleport);
         }
     }
   }
@@ -214,15 +216,15 @@ public class ChaosMovement {
     }
   }
 
-  public static boolean teleportThroughPortal(PortalTeleport portalTeleport) {
-    final TileObject portal = TileObjects.getNearest(portalTeleport.getPortalId());
+  public static boolean teleportThroughPortal(HouseTeleport houseTeleport) {
+    final TileObject portal = TileObjects.getNearest(houseTeleport.getPortalId());
 
     GameThread.invoke(() -> portal.interact("Enter"));
 
     return Time.sleepTicksUntil(() -> !Static.getClient().isInInstancedRegion(), 30);
   }
 
-  public static boolean teleportThroughPortalNexus(PortalTeleport portalTeleport) {
+  public static boolean teleportThroughPortalNexus(HouseTeleport houseTeleport) {
     final TileObject portalNexus
         = TileObjects.getNearest(Predicates.ids(Constants.PORTAL_NEXUS_IDS));
 
@@ -230,7 +232,7 @@ public class ChaosMovement {
       return false;
     }
 
-    final String destination = portalTeleport.getName().toLowerCase();
+    final String destination = houseTeleport.getName().toLowerCase();
 
     for (String action : portalNexus.getActions()) {
       if (action != null && action.toLowerCase().contains(destination)) {
@@ -276,56 +278,67 @@ public class ChaosMovement {
     return Time.sleepTicksUntil(() -> !Static.getClient().isInInstancedRegion(), 10);
   }
 
-  public static boolean teleportThroughDigsitePendant(PortalTeleport portalTeleport) {
-    final TileObject digsitePendant = TileObjects.getNearest("Digsite Pendant");
+  public static boolean teleportThroughItem(HouseTeleport houseTeleport) {
+    final TileObject item = TileObjects.getNearest(houseTeleport.getItem().getNames());
 
-    if (digsitePendant == null) {
-      System.out.println("pendant is null");
+    if (item == null) {
       return false;
     }
 
-    final String destination = portalTeleport.getName().toLowerCase();
+    final String destination = houseTeleport.getName().toLowerCase();
 
-    for (String action : digsitePendant.getActions()) {
+    for (String action : item.getActions()) {
       if (action != null && action.toLowerCase().contains(destination)) {
-        GameThread.invoke(() -> digsitePendant.interact(action));
+        GameThread.invoke(() -> item.interact(action));
 
         return Time.sleepTicksUntil(() -> !Static.getClient().isInInstancedRegion(), 30);
       }
     }
 
-    GameThread.invoke(() -> digsitePendant.interact("Teleport menu"));
+    GameThread.invoke(() -> item.interact(houseTeleport.getItem().getAction()));
 
-    if (!Time.sleepTicksUntil(() -> Widgets.isVisible(Widgets.get(187, 3)), 30)) {
+    final int widgetGroupId = houseTeleport.getWidgetGroupId();
+    final int widgetId = houseTeleport.getWidgetId();
+
+    if (!Time.sleepTicksUntil(() -> Widgets.isVisible(Widgets.get(widgetGroupId, widgetId)), 30)) {
       return false;
     }
 
-    final Widget[] children = Widgets.get(187, 3).getChildren();
+    final Widget[] children = Widgets.get(widgetGroupId, widgetId).getChildren();
 
     if (children == null) {
       return false;
     }
 
-    int i;
+    int childId;
 
-    for (i = 0; i < children.length; i++) {
-      if (children[i].getText().toLowerCase().contains(destination)) {
+    for (childId = 0; childId < children.length; childId++) {
+      if (children[childId].getText().toLowerCase().contains(destination)) {
         break;
       }
     }
 
-    final Widget destinationWidget = Widgets.get(187, 3, i);
+    final Widget destinationWidget = Widgets.get(widgetGroupId, widgetId, childId);
 
     if (destinationWidget == null) {
       return false;
     }
 
-    destinationWidget.interact(
-        0,
-        MenuAction.WIDGET_CONTINUE.getId(),
-        destinationWidget.getIndex(),
-        destinationWidget.getId()
-    );
+    if (houseTeleport.getItem() == TeleportItem.DIGSITE_PENDANT) {
+      destinationWidget.interact(
+          0,
+          MenuAction.WIDGET_CONTINUE.getId(),
+          destinationWidget.getIndex(),
+          destinationWidget.getId()
+      );
+    } else {
+      destinationWidget.interact(
+          1,
+          MenuAction.CC_OP.getId(),
+          destinationWidget.getIndex(),
+          destinationWidget.getId()
+      );
+    }
 
     return Time.sleepTicksUntil(() -> !Static.getClient().isInInstancedRegion(), 10);
   }
