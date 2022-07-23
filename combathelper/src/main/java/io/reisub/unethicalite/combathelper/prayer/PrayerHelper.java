@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Actor;
 import net.runelite.api.AnimationID;
@@ -24,9 +23,9 @@ import net.runelite.api.Hitsplat;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
 import net.runelite.api.Player;
+import net.runelite.api.Prayer;
 import net.runelite.api.Projectile;
 import net.runelite.api.ProjectileID;
-import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
@@ -40,23 +39,17 @@ import net.runelite.api.events.PlayerDespawned;
 import net.runelite.api.events.PlayerSpawned;
 import net.runelite.api.events.ProjectileSpawned;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
-import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Game;
 import net.unethicalite.api.game.GameThread;
-import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.packets.WidgetPackets;
-import net.unethicalite.api.utils.MessageUtils;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Tab;
 import net.unethicalite.api.widgets.Tabs;
 import net.unethicalite.api.widgets.Widgets;
-import net.unethicalite.client.config.UnethicaliteConfig;
-import net.unethicalite.client.managers.interaction.InteractMethod;
 
 @Singleton
 public class PrayerHelper extends Helper {
@@ -69,8 +62,6 @@ public class PrayerHelper extends Helper {
       );
   private static final int JALTOK_JAD_MAGE_ATTACK = 7592;
   private static final int JALTOK_JAD_RANGE_ATTACK = 7593;
-  @Inject
-  private UnethicaliteConfig unethicaliteConfig;
   private boolean toggleFlicking;
   private boolean firstFlick;
   private boolean toggledOff;
@@ -78,6 +69,7 @@ public class PrayerHelper extends Helper {
   private ChaosPrayer currentOverhead;
   private ChaosPrayer currentDefensive;
   private Set<ChaosPrayer> swapPrayers;
+  private int outOfSyncTicks;
 
   private Map<NPC, DemonicGorilla> gorillas;
   private List<WorldPoint> recentBoulders;
@@ -167,22 +159,41 @@ public class PrayerHelper extends Helper {
       switchToInventory = false;
     }
 
-    Widget quickPrayersWidget = Widgets.get(WidgetInfo.MINIMAP_QUICK_PRAYER_ORB);
+    final Widget quickPrayersWidget = Widgets.get(WidgetInfo.MINIMAP_QUICK_PRAYER_ORB);
+
+    if (outOfSyncTicks >= 2) {
+      currentOverhead = null;
+      outOfSyncTicks = 0;
+    }
+
+    if (isFlicking()) {
+      if (currentOverhead == null) {
+        if (Prayers.isEnabled(Prayer.PROTECT_FROM_MAGIC)) {
+          currentOverhead = ChaosPrayer.PROTECT_FROM_MAGIC;
+        } else if (Prayers.isEnabled(Prayer.PROTECT_FROM_MISSILES)) {
+          currentOverhead = ChaosPrayer.PROTECT_FROM_MISSILES;
+        } else if (Prayers.isEnabled(Prayer.PROTECT_FROM_MELEE)) {
+          currentOverhead = ChaosPrayer.PROTECT_FROM_MELEE;
+        }
+      } else {
+        if (!Prayers.isEnabled(currentOverhead.getPrayer())) {
+          outOfSyncTicks++;
+        } else {
+          outOfSyncTicks = 0;
+        }
+      }
+    }
 
     if (swapPrayers != null && !swapPrayers.isEmpty()) {
-      if (unethicaliteConfig.interactMethod() == InteractMethod.PACKETS) {
-        WidgetPackets.queueWidgetAction2Packet(
-            WidgetInfo.MINIMAP_QUICK_PRAYER_ORB.getPackedId(), -1, -1);
+      WidgetPackets.queueWidgetAction2Packet(
+          WidgetInfo.MINIMAP_QUICK_PRAYER_ORB.getPackedId(), -1, -1);
 
-        for (ChaosPrayer quickPrayer : swapPrayers) {
-          WidgetPackets.queueWidgetAction1Packet(5046276, -1, quickPrayer.getQuickPrayerId());
-        }
-
-        WidgetPackets.queueWidgetAction1Packet(5046277, -1, -1);
-        switchToInventory = config.openInventory();
-      } else {
-        swapPrayers(swapPrayers);
+      for (ChaosPrayer quickPrayer : swapPrayers) {
+        WidgetPackets.queueWidgetAction1Packet(5046276, -1, quickPrayer.getQuickPrayerId());
       }
+
+      WidgetPackets.queueWidgetAction1Packet(5046277, -1, -1);
+      switchToInventory = config.openInventory();
 
       swapPrayers = null;
     }
@@ -220,12 +231,10 @@ public class PrayerHelper extends Helper {
         case AnimationID.TZTOK_JAD_MAGIC_ATTACK:
         case JALTOK_JAD_MAGE_ATTACK:
           setPrayer(ChaosPrayer.PROTECT_FROM_MAGIC, false);
-          MessageUtils.addMessage("Pray against magic!");
           break;
         case AnimationID.TZTOK_JAD_RANGE_ATTACK:
         case JALTOK_JAD_RANGE_ATTACK:
           setPrayer(ChaosPrayer.PROTECT_FROM_MISSILES, false);
-          MessageUtils.addMessage("Pray against missiles!");
           break;
         default:
       }
@@ -233,8 +242,6 @@ public class PrayerHelper extends Helper {
   }
 
   public void keyPressed(KeyEvent e) {
-    int level = Skills.getLevel(Skill.PRAYER);
-
     if (config.prayerFlickHotkey().matches(e)) {
       toggleFlicking();
       e.consume();
@@ -276,43 +283,6 @@ public class PrayerHelper extends Helper {
 
   private void togglePrayer(Widget widget) {
     plugin.schedule(() -> widget.interact(0), 0);
-  }
-
-  private void swapPrayers(Set<ChaosPrayer> quickPrayers) {
-    plugin.schedule(
-        () -> {
-          Widget quickPrayersWidget = Widgets.get(WidgetInfo.MINIMAP_QUICK_PRAYER_ORB);
-          if (quickPrayersWidget == null) {
-            return;
-          }
-
-          quickPrayersWidget.interact(1);
-          Time.sleepTicksUntil(
-              () -> Widgets.isVisible(Widgets.get(WidgetID.QUICK_PRAYERS_GROUP_ID, 4)), 3);
-
-          for (ChaosPrayer quickPrayer : quickPrayers) {
-            Widget prayer =
-                Widgets.get(WidgetID.QUICK_PRAYERS_GROUP_ID, 4, quickPrayer.getQuickPrayerId());
-            if (prayer == null) {
-              return;
-            }
-
-            prayer.interact(0);
-          }
-
-          Widget update = Widgets.get(WidgetID.QUICK_PRAYERS_GROUP_ID, 5);
-          if (update == null) {
-            return;
-          }
-
-          update.interact(0);
-
-          if (config.openInventory()) {
-            Tabs.openInterface(Tab.INVENTORY);
-          }
-        },
-        0
-    );
   }
 
   public void toggleFlicking() {
