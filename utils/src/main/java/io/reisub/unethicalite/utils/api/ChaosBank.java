@@ -1,10 +1,12 @@
 package io.reisub.unethicalite.utils.api;
 
+import io.reisub.unethicalite.utils.Constants;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import net.runelite.api.Item;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
 
@@ -72,5 +74,14 @@ public class ChaosBank {
   @Deprecated
   public static void bankInventoryInteract(Item item, String action) {
     item.interact(action);
+  }
+
+  public static boolean haveGracefulInBank() {
+    return Bank.contains(Predicates.ids(Constants.GRACEFUL_HOOD))
+        || Bank.contains(Predicates.ids(Constants.GRACEFUL_CAPE))
+        || Bank.contains(Predicates.ids(Constants.GRACEFUL_TOP))
+        || Bank.contains(Predicates.ids(Constants.GRACEFUL_LEGS))
+        || Bank.contains(Predicates.ids(Constants.GRACEFUL_GLOVES))
+        || Bank.contains(Predicates.ids(Constants.GRACEFUL_BOOTS));
   }
 }
