@@ -3,6 +3,7 @@ package io.reisub.unethicalite.birdhouse.tasks;
 import io.reisub.unethicalite.birdhouse.BirdHouse;
 import io.reisub.unethicalite.birdhouse.Config;
 import io.reisub.unethicalite.utils.Constants;
+import io.reisub.unethicalite.utils.api.ChaosBank;
 import io.reisub.unethicalite.utils.tasks.BankTask;
 import javax.inject.Inject;
 import net.runelite.api.Item;
@@ -18,7 +19,6 @@ public class StartRun extends BankTask {
 
   @Inject
   private BirdHouse plugin;
-
   @Inject
   private Config config;
 
@@ -37,7 +37,18 @@ public class StartRun extends BankTask {
     open(true);
 
     if (!Inventory.isEmpty()) {
+      final Item gemBag = Bank.Inventory.getFirst(Predicates.nameContains("gem bag", false));
+
+      if (gemBag != null) {
+        gemBag.interact("Empty");
+      }
+
       Bank.depositInventory();
+
+      if (config.equipGraceful() && ChaosBank.haveGracefulInBank()) {
+        Bank.depositEquipment();
+      }
+
       Time.sleepTick();
     }
 
@@ -60,7 +71,7 @@ public class StartRun extends BankTask {
       default:
     }
 
-    if (Bank.contains(Predicates.ids(Constants.GRACEFUL_GLOVES))) {
+    if (config.equipGraceful() && ChaosBank.haveGracefulInBank()) {
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_CAPE), 1, Bank.WithdrawMode.ITEM);
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_BOOTS), 1, Bank.WithdrawMode.ITEM);
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_GLOVES), 1, Bank.WithdrawMode.ITEM);

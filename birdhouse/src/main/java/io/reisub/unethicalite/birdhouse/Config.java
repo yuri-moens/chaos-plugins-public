@@ -58,6 +58,16 @@ public interface Config extends net.runelite.client.config.Config {
   }
 
   @ConfigItem(
+      keyName = "equipGraceful",
+      name = "Equip graceful",
+      description =
+          "Deposit current equipment and equip graceful before starting a run",
+      position = 5)
+  default boolean equipGraceful() {
+    return true;
+  }
+
+  @ConfigItem(
       keyName = "startButton",
       name = "Force Start/Stop",
       description =
