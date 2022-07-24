@@ -1,11 +1,13 @@
 package io.reisub.unethicalite.birdhouse;
 
 import io.reisub.unethicalite.utils.enums.Log;
+import io.reisub.unethicalite.utils.enums.TeleportLocation;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import net.runelite.client.config.Button;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Keybind;
 
 @ConfigGroup("chaosbirdhouse")
@@ -47,17 +49,6 @@ public interface Config extends net.runelite.client.config.Config {
   }
 
   @ConfigItem(
-      keyName = "tpAfterRun",
-      name = "TP after run",
-      description =
-          "Select teleport location after finishing a run. This option only works when "
-              + "not farming seaweed.",
-      position = 4)
-  default TeleportLocation tpLocation() {
-    return TeleportLocation.NOWHERE;
-  }
-
-  @ConfigItem(
       keyName = "equipGraceful",
       name = "Equip graceful",
       description =
@@ -65,6 +56,56 @@ public interface Config extends net.runelite.client.config.Config {
       position = 5)
   default boolean equipGraceful() {
     return true;
+  }
+
+  @ConfigSection(
+      keyName = "teleportConfig",
+      name = "Teleport Configuration",
+      description = "Configure teleportation",
+      position = Integer.MAX_VALUE - 5)
+  String teleportConfig = "teleportConfig";
+
+  @ConfigItem(
+      keyName = "tpAfterRun",
+      name = "TP after run",
+      description = "Select teleport location after finishing a run. This option only works when "
+              + "not farming seaweed.",
+      section = "teleportConfig",
+      position = Integer.MAX_VALUE - 4)
+  default TeleportLocation tpLocation() {
+    return TeleportLocation.NOWHERE;
+  }
+
+  @ConfigItem(
+      keyName = "goThroughHouse",
+      name = "Go through house",
+      description = "Force teleport usage at your house "
+          + "(eg. use mounted digsite pendant instead of item)",
+      section = "teleportConfig",
+      position = Integer.MAX_VALUE - 3)
+  default boolean goThroughHouse() {
+    return false;
+  }
+
+  @ConfigItem(
+      keyName = "goThroughHouseFallback",
+      name = "Go through house fallback",
+      description = "Use teleport method at house as a fallback when out of items "
+          + "(eg. use mounted digsite pendant when out of pendants)",
+      section = "teleportConfig",
+      position = Integer.MAX_VALUE - 2)
+  default boolean goThroughHouseFallback() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "useHouseTab",
+      name = "Use house tab",
+      description = "Use a house tab rather than runes to teleport to your house",
+      section = "teleportConfig",
+      position = Integer.MAX_VALUE - 1)
+  default boolean useHouseTab() {
+    return false;
   }
 
   @ConfigItem(

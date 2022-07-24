@@ -61,15 +61,11 @@ public class StartRun extends BankTask {
     Bank.withdraw(config.logs().getId(), 4, Bank.WithdrawMode.ITEM);
     Bank.withdraw(getSeedId(), 40, Bank.WithdrawMode.ITEM);
 
-    switch (config.tpLocation()) {
-      case EDGEVILLE:
-      case FARMING_GUILD:
-      case FEROX_ENCLAVE_DUELING_RING:
-        Bank.withdraw(
-            Predicates.ids(config.tpLocation().getTeleportItemIds()), 1, Bank.WithdrawMode.ITEM);
-        break;
-      default:
-    }
+    config.tpLocation().withdrawItems(
+        config.goThroughHouse(),
+        config.goThroughHouseFallback(),
+        config.useHouseTab()
+    );
 
     if (config.equipGraceful() && ChaosBank.haveGracefulInBank()) {
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_CAPE), 1, Bank.WithdrawMode.ITEM);
