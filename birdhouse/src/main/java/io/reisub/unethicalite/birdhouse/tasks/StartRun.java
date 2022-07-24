@@ -4,6 +4,8 @@ import io.reisub.unethicalite.birdhouse.BirdHouse;
 import io.reisub.unethicalite.birdhouse.Config;
 import io.reisub.unethicalite.utils.Constants;
 import io.reisub.unethicalite.utils.api.ChaosBank;
+import io.reisub.unethicalite.utils.api.ChaosMovement;
+import io.reisub.unethicalite.utils.enums.HouseTeleport;
 import io.reisub.unethicalite.utils.tasks.BankTask;
 import javax.inject.Inject;
 import net.runelite.api.Item;
@@ -11,6 +13,7 @@ import net.runelite.api.ItemID;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.Bank.WithdrawMode;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Dialog;
@@ -57,9 +60,22 @@ public class StartRun extends BankTask {
         1,
         Bank.WithdrawMode.ITEM);
     Bank.withdraw(ItemID.CHISEL, 1, Bank.WithdrawMode.ITEM);
-    Bank.withdraw(Predicates.ids(Constants.DIGSITE_PENDANT_IDS), 1, Bank.WithdrawMode.ITEM);
     Bank.withdraw(config.logs().getId(), 4, Bank.WithdrawMode.ITEM);
     Bank.withdraw(getSeedId(), 40, Bank.WithdrawMode.ITEM);
+
+    if (config.goThroughHouse()
+        || (!Bank.contains(Predicates.ids(Constants.DIGSITE_PENDANT_IDS))
+        && config.goThroughHouseFallback())) {
+      if (config.useHouseTab()) {
+        Bank.withdraw(ItemID.TELEPORT_TO_HOUSE, 1, WithdrawMode.ITEM);
+      } else {
+        Bank.withdraw(ItemID.AIR_RUNE, 1, WithdrawMode.ITEM);
+        Bank.withdraw(ItemID.EARTH_RUNE, 1, WithdrawMode.ITEM);
+        Bank.withdraw(ItemID.LAW_RUNE, 1, WithdrawMode.ITEM);
+      }
+    } else {
+      Bank.withdraw(Predicates.ids(Constants.DIGSITE_PENDANT_IDS), 1, Bank.WithdrawMode.ITEM);
+    }
 
     config.tpLocation().withdrawItems(
         config.goThroughHouse(),
@@ -90,14 +106,15 @@ public class StartRun extends BankTask {
     }
 
     final Item pendant = Inventory.getFirst(Predicates.ids(Constants.DIGSITE_PENDANT_IDS));
+
     if (pendant == null) {
-      return;
+      ChaosMovement.teleportThroughHouse(HouseTeleport.FOSSIL_ISLAND);
+    } else {
+      pendant.interact("Rub");
+      Time.sleepTicksUntil(Dialog::isViewingOptions, 5);
+
+      Dialog.chooseOption(2);
     }
-
-    pendant.interact("Rub");
-    Time.sleepTicksUntil(Dialog::isViewingOptions, 5);
-
-    Dialog.chooseOption(2);
 
     plugin.setManuallyStarted(false);
   }
@@ -116,7 +133,9 @@ public class StartRun extends BankTask {
     return (Inventory.contains(ItemID.IMCANDO_HAMMER, ItemID.HAMMER) || Equipment.contains(
         ItemID.IMCANDO_HAMMER))
         && Inventory.contains(ItemID.CHISEL)
-        && Inventory.contains(Predicates.ids(Constants.DIGSITE_PENDANT_IDS))
+        && (Inventory.contains(Predicates.ids(Constants.DIGSITE_PENDANT_IDS))
+        || (Inventory.contains(ItemID.AIR_RUNE) && Inventory.contains(ItemID.EARTH_RUNE)
+        && Inventory.contains(ItemID.LAW_RUNE)))
         && Inventory.getCount(config.logs().getId()) == 4
         && Inventory.getCount(true, Predicates.ids(Constants.BIRD_HOUSE_SEED_IDS)) == 40;
   }
