@@ -137,9 +137,7 @@ public class ChaosMovement {
   }
 
   public static boolean teleportToHouse() {
-    if (Standard.TELEPORT_TO_HOUSE.canCast()) {
-      Standard.TELEPORT_TO_HOUSE.cast();
-    } else if (Inventory.contains(Predicates.ids(Constants.CONSTRUCTION_CAPE_IDS))
+    if (Inventory.contains(Predicates.ids(Constants.CONSTRUCTION_CAPE_IDS))
         || Equipment.contains(Predicates.ids(Constants.CONSTRUCTION_CAPE_IDS))) {
       Interact.interactWithInventoryOrEquipment(
           Constants.CONSTRUCTION_CAPE_IDS,
@@ -147,6 +145,8 @@ public class ChaosMovement {
           null,
           -1
       );
+    } else if (Standard.TELEPORT_TO_HOUSE.canCast()) {
+      Standard.TELEPORT_TO_HOUSE.cast();
     } else if (Inventory.contains(ItemID.TELEPORT_TO_HOUSE)) {
       Inventory.getFirst(ItemID.TELEPORT_TO_HOUSE).interact("Break");
     } else {
