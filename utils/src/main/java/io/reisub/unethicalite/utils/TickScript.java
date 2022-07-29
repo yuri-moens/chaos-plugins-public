@@ -83,28 +83,20 @@ public abstract class TickScript extends Plugin implements KeyListener {
       return;
     }
 
-    int minDelay = Math.min(utilsConfig.minDelay(), utilsConfig.maxDelay());
-    int maxDelay = Math.max(utilsConfig.minDelay(), utilsConfig.maxDelay());
-
     try {
       if (current == null) {
-        current =
-            executor.schedule(this::tick, Rand.nextInt(minDelay, maxDelay), TimeUnit.MILLISECONDS);
+        current = schedule(this::tick);
       } else {
         if (current.isDone()) {
           if (next == null) {
-            current =
-                executor.schedule(
-                    this::tick, Rand.nextInt(minDelay, maxDelay), TimeUnit.MILLISECONDS);
+            current = schedule(this::tick);
           } else {
             current = next;
             next = null;
           }
         } else {
           if (next == null) {
-            next =
-                executor.schedule(
-                    this::tick, Rand.nextInt(minDelay, maxDelay), TimeUnit.MILLISECONDS);
+            next = schedule(this::tick);
           }
         }
       }
@@ -296,6 +288,16 @@ public abstract class TickScript extends Plugin implements KeyListener {
         break;
       }
     }
+  }
+
+  protected ScheduledFuture<?> schedule(Runnable runnable) {
+    final int minDelay = Math.min(utilsConfig.minDelay(), utilsConfig.maxDelay());
+    final int maxDelay = Math.max(utilsConfig.minDelay(), utilsConfig.maxDelay());
+
+    return executor.schedule(
+        runnable,
+        Rand.nextInt(minDelay, maxDelay), TimeUnit.MILLISECONDS
+    );
   }
 
   @Override
