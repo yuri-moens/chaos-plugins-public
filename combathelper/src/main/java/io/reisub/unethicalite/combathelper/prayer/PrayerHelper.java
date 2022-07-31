@@ -282,7 +282,7 @@ public class PrayerHelper extends Helper {
   }
 
   private void togglePrayer(Widget widget) {
-    plugin.schedule(() -> widget.interact(0), 0);
+    GameThread.invoke(() -> WidgetPackets.widgetFirstOption(widget));
   }
 
   public void toggleFlicking() {
