@@ -33,7 +33,7 @@ public class MiscHelper extends Helper {
   private void onPlayerSpawned(PlayerSpawned event) {
     if (!config.tpOnDangerousPlayer()
         || !pkTeleport
-        || Game.getClient().getVar(Varbits.IN_WILDERNESS) == 0
+        || Static.getClient().getVar(Varbits.IN_WILDERNESS) == 0
         || event.getPlayer() == null) {
       return;
     }
@@ -56,7 +56,7 @@ public class MiscHelper extends Helper {
   private void onInteractingChanged(InteractingChanged event) {
     if (!config.tpOnPlayerAttack()
         || !pkTeleport
-        || Game.getClient().getVar(Varbits.IN_WILDERNESS) == 0) {
+        || Static.getClient().getVar(Varbits.IN_WILDERNESS) == 0) {
       return;
     }
 

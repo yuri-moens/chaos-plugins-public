@@ -13,7 +13,6 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.unethicalite.api.commons.Rand;
 import net.unethicalite.api.commons.Time;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.magic.SpellBook;
 import net.unethicalite.api.magic.SpellBook.Standard;
@@ -67,7 +66,7 @@ public class AlchHelper extends Helper {
 
   @Subscribe
   private void onGameTick(GameTick event) {
-    if (!active || last + 5 > Game.getClient().getTickCount()) {
+    if (!active || last + 5 > Static.getClient().getTickCount()) {
       return;
     }
 

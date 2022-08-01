@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.unethicalite.api.commons.Rand;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.movement.Movement;
+import net.unethicalite.client.Static;
 
 @Slf4j
 public class Run extends Task {
@@ -36,14 +36,14 @@ public class Run extends Task {
   public boolean validate() {
     return !Movement.isRunEnabled()
         && Movement.getRunEnergy() >= threshold
-        && Game.getClient().getTickCount() > last + 3;
+        && Static.getClient().getTickCount() > last + 3;
   }
 
   @Override
   public void execute() {
     Movement.toggleRun();
     threshold = Rand.nextInt(min, max);
-    last = Game.getClient().getTickCount();
+    last = Static.getClient().getTickCount();
   }
 
   public void setRange(int min, int max) {

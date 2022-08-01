@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import net.runelite.api.ItemID;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileItems;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Inventory;
+import net.unethicalite.client.Static;
 
 @AllArgsConstructor
 public class HandleBank extends BankTask {
@@ -47,7 +47,7 @@ public class HandleBank extends BankTask {
       Bank.withdrawAll(config.foodId(), Bank.WithdrawMode.ITEM);
     }
 
-    plugin.setLastBank(Game.getClient().getTickCount());
+    plugin.setLastBank(Static.getClient().getTickCount());
 
     close();
   }

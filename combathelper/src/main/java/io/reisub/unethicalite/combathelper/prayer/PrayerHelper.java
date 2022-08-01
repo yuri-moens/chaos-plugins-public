@@ -43,13 +43,13 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.game.GameThread;
 import net.unethicalite.api.packets.WidgetPackets;
 import net.unethicalite.api.widgets.Prayers;
 import net.unethicalite.api.widgets.Tab;
 import net.unethicalite.api.widgets.Tabs;
 import net.unethicalite.api.widgets.Widgets;
+import net.unethicalite.client.Static;
 
 @Singleton
 public class PrayerHelper extends Helper {
@@ -458,7 +458,7 @@ public class PrayerHelper extends Helper {
         // so we keep track of the attack here until the damage splat
         // has appeared on the player.
 
-        int damagesOnTick = Game.getClient().getTickCount();
+        int damagesOnTick = Static.getClient().getTickCount();
         if (attackStyle == DemonicGorilla.AttackStyle.MAGIC) {
           MemorizedPlayer mp = memorizedPlayers.get(target);
           WorldArea lastPlayerArea = mp.getLastWorldArea();
@@ -501,12 +501,12 @@ public class PrayerHelper extends Helper {
 
     checkGorillaAttackStyleSwitch(gorilla, protectedStyle);
 
-    int tickCounter = Game.getClient().getTickCount();
+    int tickCounter = Static.getClient().getTickCount();
     gorilla.setNextAttackTick(tickCounter + DemonicGorilla.ATTACK_RATE);
   }
 
   private void checkGorillaAttacks() {
-    int tickCounter = Game.getClient().getTickCount();
+    int tickCounter = Static.getClient().getTickCount();
     for (DemonicGorilla gorilla : gorillas.values()) {
       Player interacting = (Player) gorilla.getNpc().getInteracting();
       MemorizedPlayer mp = memorizedPlayers.get(interacting);
@@ -617,7 +617,7 @@ public class PrayerHelper extends Helper {
               gorilla
                   .getLastWorldArea()
                   .calculateNextTravellingPoint(
-                      Game.getClient(),
+                      Static.getClient(),
                       mp.getLastWorldArea(),
                       true,
                       x -> {
@@ -655,7 +655,7 @@ public class PrayerHelper extends Helper {
             WorldPoint predictedMovement = predictedNewArea.toWorldPoint();
             if (distance <= DemonicGorilla.MAX_ATTACK_RANGE
                 && mp.getLastWorldArea()
-                .hasLineOfSightTo(Game.getClient(), gorilla.getLastWorldArea())) {
+                .hasLineOfSightTo(Static.getClient(), gorilla.getLastWorldArea())) {
               if (predictedMovement.distanceTo(gorilla.getLastWorldArea().toWorldPoint()) != 0) {
                 if (predictedMovement.distanceTo(gorilla.getNpc().getWorldLocation()) == 0) {
                   gorilla.setNextPosibleAttackStyles(
@@ -722,7 +722,11 @@ public class PrayerHelper extends Helper {
 
     final WorldPoint loc =
         WorldPoint.fromLocal(
-            Game.getClient(), projectile.getX1(), projectile.getY1(), Game.getClient().getPlane());
+            Static.getClient(),
+            projectile.getX1(),
+            projectile.getY1(),
+            Static.getClient().getPlane()
+        );
 
     if (projectileId == ProjectileID.DEMONIC_GORILLA_BOULDER) {
       recentBoulders.add(loc);
@@ -737,7 +741,7 @@ public class PrayerHelper extends Helper {
 
   private void checkPendingAttacks() {
     Iterator<PendingGorillaAttack> it = pendingAttacks.iterator();
-    int tickCounter = Game.getClient().getTickCount();
+    int tickCounter = Static.getClient().getTickCount();
     while (it.hasNext()) {
       PendingGorillaAttack attack = it.next();
       if (tickCounter >= attack.getFinishesOnTick()) {

@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.Players;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
+import net.unethicalite.client.Static;
 
 @RequiredArgsConstructor
 public class Drop extends Task {
@@ -29,8 +29,8 @@ public class Drop extends Task {
     int count = Inventory.getCount(config.foodId());
     return config.sonicMode()
         && (plugin.getCurrentActivity() == Activity.IDLE || count == 1)
-        && (count > 0 || plugin.getLastBank() + 1 >= Game.getClient().getTickCount())
-        && Game.getClient().getTickCount() >= plugin.getLastDrop() + 3;
+        && (count > 0 || plugin.getLastBank() + 1 >= Static.getClient().getTickCount())
+        && Static.getClient().getTickCount() >= plugin.getLastDrop() + 3;
   }
 
   @Override
@@ -49,6 +49,6 @@ public class Drop extends Task {
 
     Time.sleepTick();
 
-    plugin.setLastDrop(Game.getClient().getTickCount());
+    plugin.setLastDrop(Static.getClient().getTickCount());
   }
 }

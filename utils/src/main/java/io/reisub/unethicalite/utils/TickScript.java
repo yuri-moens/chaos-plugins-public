@@ -35,7 +35,6 @@ import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.unethicalite.api.commons.Rand;
 import net.unethicalite.api.entities.Players;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.input.Keyboard;
 import net.unethicalite.api.utils.MessageUtils;
 import net.unethicalite.api.widgets.Dialog;
@@ -137,7 +136,7 @@ public abstract class TickScript extends Plugin implements KeyListener {
       return;
     }
 
-    if (event.getItemContainer() != Game.getClient().getItemContainer(InventoryID.INVENTORY)) {
+    if (event.getItemContainer() != Static.getClient().getItemContainer(InventoryID.INVENTORY)) {
       return;
     }
 
@@ -264,10 +263,10 @@ public abstract class TickScript extends Plugin implements KeyListener {
   }
 
   private void checkIdleLogout() {
-    int idleClientTicks = Game.getClient().getKeyboardIdleTicks();
+    int idleClientTicks = Static.getClient().getKeyboardIdleTicks();
 
-    if (Game.getClient().getMouseIdleTicks() < idleClientTicks) {
-      idleClientTicks = Game.getClient().getMouseIdleTicks();
+    if (Static.getClient().getMouseIdleTicks() < idleClientTicks) {
+      idleClientTicks = Static.getClient().getMouseIdleTicks();
     }
 
     if (idleClientTicks > 12500) {
@@ -275,8 +274,8 @@ public abstract class TickScript extends Plugin implements KeyListener {
 
       Keyboard.type((char) KeyEvent.VK_BACK_SPACE);
 
-      Game.getClient().setKeyboardIdleTicks(0);
-      Game.getClient().setMouseIdleTicks(0);
+      Static.getClient().setKeyboardIdleTicks(0);
+      Static.getClient().setMouseIdleTicks(0);
     }
   }
 

@@ -10,9 +10,9 @@ import net.runelite.api.ObjectID;
 import net.runelite.api.TileObject;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.TileObjects;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Production;
+import net.unethicalite.client.Static;
 
 @RequiredArgsConstructor
 public class Cook extends Task {
@@ -32,8 +32,8 @@ public class Cook extends Task {
 
     return !config.sonicMode()
         && (plugin.getCurrentActivity() == Activity.IDLE || count == 1)
-        && (count > 0 || plugin.getLastBank() + 1 >= Game.getClient().getTickCount())
-        && Game.getClient().getTickCount() >= last + 3;
+        && (count > 0 || plugin.getLastBank() + 1 >= Static.getClient().getTickCount())
+        && Static.getClient().getTickCount() >= last + 3;
   }
 
   @Override
@@ -57,7 +57,8 @@ public class Cook extends Task {
       rawFood.useOn(fire);
     }
 
-    if (count > 1 || (count == 0 && plugin.getLastBank() + 1 >= Game.getClient().getTickCount())) {
+    if (count > 1
+        || (count == 0 && plugin.getLastBank() + 1 >= Static.getClient().getTickCount())) {
       Time.sleepTicksUntil(Production::isOpen, 20);
     }
 
@@ -67,6 +68,6 @@ public class Cook extends Task {
       Time.sleepTicksUntil(() -> plugin.getCurrentActivity() == Activity.COOKING, 5);
     }
 
-    last = Game.getClient().getTickCount();
+    last = Static.getClient().getTickCount();
   }
 }

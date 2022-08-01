@@ -20,7 +20,7 @@ import org.pf4j.Extension;
 @Extension
 public class Utils extends Plugin {
   public static boolean isLoggedIn() {
-    return Game.getClient() != null && Game.getState() == GameState.LOGGED_IN;
+    return Static.getClient() != null && Game.getState() == GameState.LOGGED_IN;
   }
 
   public static boolean isInRegion(int... regionIds) {
