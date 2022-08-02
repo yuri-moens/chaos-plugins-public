@@ -31,5 +31,6 @@ public enum Activity {
   STOCKING_CANNON(),
   FILLING_BUCKETS(),
   MAKING_TABS(),
+  SPINNING(),
   ;
 }
