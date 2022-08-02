@@ -19,6 +19,7 @@ import org.pf4j.Extension;
 @Singleton
 @Extension
 public class Utils extends Plugin {
+
   public static boolean isLoggedIn() {
     return Static.getClient() != null && Game.getState() == GameState.LOGGED_IN;
   }

@@ -1,11 +1,9 @@
 package io.reisub.unethicalite.utils;
 
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.api.ChaosMovement;
-import io.reisub.unethicalite.utils.enums.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import java.awt.event.KeyEvent;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,23 +41,28 @@ import net.unethicalite.client.Static;
 
 @Slf4j
 public abstract class TickScript extends Plugin implements KeyListener {
+
+  @Inject
+  private Config utilsConfig;
   @Inject
   private KeyManager keyManager;
 
   protected final List<Task> tasks = new ArrayList<>();
   protected final Map<Skill, Activity> idleCheckSkills = new HashMap<>();
-  @Getter protected Activity currentActivity;
-  @Getter protected Activity previousActivity;
+  private Activity currentActivity;
+  private Activity previousActivity;
   protected ScheduledExecutorService executor;
-  protected Instant lastLogin = Instant.EPOCH;
-  protected Instant lastActionTime = Instant.EPOCH;
-  protected Duration lastActionTimeout = Duration.ofSeconds(3);
-  protected Instant lastExperience = Instant.EPOCH;
-  protected Instant lastInventoryChange = Instant.EPOCH;
+  protected int lastLoginTick = 0;
+  protected int lastActionTick = 0;
+  protected int lastActionTimeout = 5;
+  protected int lastExperienceTick = 0;
+  protected int lastInventoryChangeTick = 0;
   protected boolean idleCheckInventoryChange = false;
-  @Inject private Config utilsConfig;
-  @Getter private volatile boolean running;
-  @Getter @Setter private Instant lastHop;
+  @Getter
+  private boolean running;
+  @Getter
+  @Setter
+  private int lastHopTick;
   private ScheduledFuture<?> current;
   private ScheduledFuture<?> next;
 
@@ -108,6 +111,15 @@ public abstract class TickScript extends Plugin implements KeyListener {
   }
 
   @Subscribe
+  private void onWidgetHiddenChanged(WidgetHiddenChanged event) {
+    if (Widgets.isVisible(Widgets.get(WidgetInfo.LEVEL_UP_LEVEL))) {
+      Dialog.continueSpace();
+      Dialog.continueSpace();
+      setActivity(Activity.IDLE);
+    }
+  }
+
+  @Subscribe
   private void onStatChanged(StatChanged event) {
     if (!isRunning() || !Utils.isLoggedIn()) {
       return;
@@ -116,17 +128,8 @@ public abstract class TickScript extends Plugin implements KeyListener {
     for (Skill skill : idleCheckSkills.keySet()) {
       if (event.getSkill() == skill) {
         setActivity(idleCheckSkills.get(skill));
-        lastExperience = Instant.now();
+        lastExperienceTick = Static.getClient().getTickCount();
       }
-    }
-  }
-
-  @Subscribe
-  private void onWidgetHiddenChanged(WidgetHiddenChanged event) {
-    if (Widgets.isVisible(Widgets.get(WidgetInfo.LEVEL_UP_LEVEL))) {
-      Dialog.continueSpace();
-      Dialog.continueSpace();
-      setActivity(Activity.IDLE);
     }
   }
 
@@ -141,38 +144,48 @@ public abstract class TickScript extends Plugin implements KeyListener {
     }
 
     if (idleCheckInventoryChange) {
-      lastInventoryChange = Instant.now();
+      lastInventoryChangeTick = Static.getClient().getTickCount();
     }
   }
 
   @Subscribe
   private void onGameStateChanged(GameStateChanged event) {
     if (event.getGameState() == GameState.LOGGED_IN) {
-      lastLogin = Instant.now();
+      lastLoginTick = Static.getClient().getTickCount();
     }
   }
 
-  public void setActivity(Activity action) {
-    if (action == Activity.IDLE && currentActivity != Activity.IDLE) {
+  public void setActivity(Activity activity) {
+    if (activity == Activity.IDLE && currentActivity != Activity.IDLE) {
       previousActivity = currentActivity;
+      log.debug("Setting previous activity: " + previousActivity);
     }
 
-    currentActivity = action;
+    currentActivity = activity;
+    log.debug("Setting current activity: " + currentActivity);
 
-    if (action != Activity.IDLE) {
-      lastActionTime = Instant.now();
+    if (activity != Activity.IDLE) {
+      lastActionTick = Static.getClient().getTickCount();
     }
   }
 
-  public final boolean isLoggedInForLongerThan(Duration duration) {
-    return Duration.between(lastLogin, Instant.now()).compareTo(duration) >= 0;
+  public final boolean isCurrentActivity(Activity activity) {
+    return currentActivity == activity;
+  }
+
+  public final boolean wasPreviousActivity(Activity activity) {
+    return previousActivity == activity;
+  }
+
+  public final boolean isLoggedInForLongerThan(int ticks) {
+    return Static.getClient().getTickCount() - lastLoginTick > ticks;
   }
 
   @Override
   protected final void startUp() {
     executor = Executors.newSingleThreadScheduledExecutor();
 
-    Static.getKeyManager().registerKeyListener((KeyListener) this);
+    Static.getKeyManager().registerKeyListener(this);
   }
 
   @Override
@@ -180,38 +193,27 @@ public abstract class TickScript extends Plugin implements KeyListener {
     stop();
     executor.shutdownNow();
 
-    Static.getKeyManager().unregisterKeyListener((KeyListener) this);
+    Static.getKeyManager().unregisterKeyListener(this);
   }
 
-  public void start() {
+  public final void start() {
+    log.info("Starting " + this.getName());
     running = true;
+
+    previousActivity = Activity.IDLE;
+    currentActivity = Activity.IDLE;
+
     onStart();
   }
 
-  public void start(String msg) {
+  public final void start(String msg) {
     MessageUtils.addMessage(msg);
     start();
   }
 
-  public void stop() {
-    running = false;
-    onStop();
-  }
-
-  public void stop(String msg) {
-    MessageUtils.addMessage(msg);
-    stop();
-  }
-
-  protected void onStart() {
-    log.info("Starting " + this.getName());
-
-    previousActivity = Activity.IDLE;
-    currentActivity = Activity.IDLE;
-  }
-
-  protected void onStop() {
+  public final void stop() {
     log.info("Stopping " + this.getName());
+    running = false;
 
     for (Task task : tasks) {
       Static.getEventBus().unregister(task);
@@ -221,6 +223,21 @@ public abstract class TickScript extends Plugin implements KeyListener {
 
     previousActivity = Activity.IDLE;
     currentActivity = Activity.IDLE;
+
+    onStop();
+  }
+
+  public final void stop(String msg) {
+    MessageUtils.addMessage(msg);
+    stop();
+  }
+
+  protected void onStart() {
+
+  }
+
+  protected void onStop() {
+
   }
 
   protected final void addTask(Task task) {
@@ -230,11 +247,7 @@ public abstract class TickScript extends Plugin implements KeyListener {
   }
 
   protected final <T extends Task> void addTask(Class<T> type) {
-    Task task = injector.getInstance(type);
-
-    Static.getEventBus().register(task);
-
-    tasks.add(task);
+    tasks.add(injector.getInstance(type));
   }
 
   protected void checkActionTimeout() {
@@ -242,22 +255,19 @@ public abstract class TickScript extends Plugin implements KeyListener {
       return;
     }
 
-    if (Duration.between(lastExperience, Instant.now()).compareTo(lastActionTimeout) < 0) {
+    final int currentTick = Static.getClient().getTickCount();
+
+    if (currentTick - lastExperienceTick < lastActionTimeout
+        || currentTick - lastInventoryChangeTick < lastActionTimeout) {
       return;
     }
 
-    if (Duration.between(lastInventoryChange, Instant.now()).compareTo(lastActionTimeout) < 0) {
+    if (!Players.getLocal().isIdle()) {
+      lastActionTick = currentTick;
       return;
     }
 
-    if (!Players.getLocal().isIdle() || lastActionTime == null) {
-      lastActionTime = Instant.now();
-      return;
-    }
-
-    Duration sinceAction = Duration.between(lastActionTime, Instant.now());
-
-    if (sinceAction.compareTo(lastActionTimeout) >= 0) {
+    if (currentTick - lastActionTick >= lastActionTimeout) {
       setActivity(Activity.IDLE);
     }
   }
@@ -270,7 +280,7 @@ public abstract class TickScript extends Plugin implements KeyListener {
     }
 
     if (idleClientTicks > 12500) {
-      log.info("Resetting idle");
+      log.debug("Resetting idle");
 
       Keyboard.type((char) KeyEvent.VK_BACK_SPACE);
 
@@ -283,6 +293,7 @@ public abstract class TickScript extends Plugin implements KeyListener {
     for (Task t : tasks) {
       if (t.validate()) {
         log.info(t.getStatus());
+        setActivity(t.getActivity());
         t.execute();
         break;
       }
