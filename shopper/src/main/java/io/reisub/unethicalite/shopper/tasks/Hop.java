@@ -38,7 +38,7 @@ public class Hop extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (worldQueue == null) {
       initializeWorldQueue();
     }
@@ -46,7 +46,7 @@ public class Hop extends Task {
     World world = worldQueue.poll();
     if (world == null) {
       initializeWorldQueue();
-      return;
+      return 1;
     }
 
     worldQueue.add(world);
@@ -54,7 +54,7 @@ public class Hop extends Task {
     if (Shop.isOpen()) {
       DialogPackets.closeInterface();
       if (!Time.sleepTicksUntil(() -> !Shop.isOpen(), 5)) {
-        return;
+        return 1;
       }
     }
 
@@ -63,6 +63,8 @@ public class Hop extends Task {
 
     plugin.setHop(false);
     last = Static.getClient().getTickCount();
+
+    return 1;
   }
 
   @Subscribe

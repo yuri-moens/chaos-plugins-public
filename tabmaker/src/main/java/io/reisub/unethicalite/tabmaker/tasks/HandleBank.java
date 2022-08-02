@@ -46,7 +46,7 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (Static.getClient().isInInstancedRegion()) {
       Interact.interactWithInventoryOrEquipment(
           Constants.CRAFTING_CAPE_IDS,
@@ -63,7 +63,7 @@ public class HandleBank extends BankTask {
 
     if (config.amount() > 0 && tabsMade >= config.amount()) {
       plugin.stop("Made " + tabsMade + " tabs as requested. Stopping plugin.");
-      return;
+      return 1;
     }
 
     open(true);
@@ -72,7 +72,7 @@ public class HandleBank extends BankTask {
 
     if (!Bank.contains(ItemID.SOFT_CLAY)) {
       plugin.stop("Out of clay. Stopping plugin.");
-      return;
+      return 1;
     }
 
 
@@ -87,5 +87,7 @@ public class HandleBank extends BankTask {
     } else {
       Bank.withdrawAll(ItemID.SOFT_CLAY, WithdrawMode.ITEM);
     }
+
+    return 1;
   }
 }

@@ -21,12 +21,12 @@ public class Fletch extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     final Item knife = Inventory.getFirst(ItemID.KNIFE);
     final Item logs = Inventory.getFirst(Predicates.nameContains("logs", false));
 
     if (knife == null || logs == null) {
-      return;
+      return 1;
     }
 
     knife.useOn(logs);
@@ -35,5 +35,7 @@ public class Fletch extends Task {
 
     Production.chooseOption(1);
     Time.sleepTicksUntil(() -> !Inventory.contains(Predicates.nameContains("logs", false)), 100);
+
+    return 1;
   }
 }

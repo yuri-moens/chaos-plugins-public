@@ -27,10 +27,10 @@ public class AddSeeds extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     final Item seeds = Inventory.getFirst((i) -> Constants.BIRD_HOUSE_SEED_IDS.contains(i.getId()));
     if (seeds == null) {
-      return;
+      return 1;
     }
 
     final int quantity = seeds.getQuantity();
@@ -41,5 +41,7 @@ public class AddSeeds extends Task {
             Inventory.getCount(true, (i) -> Constants.BIRD_HOUSE_SEED_IDS.contains(i.getId()))
                 < quantity,
         5);
+
+    return 1;
   }
 }

@@ -27,10 +27,10 @@ public class GoToVerdantValley extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     TileObject tree = TileObjects.getNearest(i -> Constants.MAGIC_MUSHTREE_IDS.contains(i.getId()));
     if (tree == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> tree.interact(0));
@@ -39,7 +39,7 @@ public class GoToVerdantValley extends Task {
 
     Widget mushroomValleyWidget = Widgets.get(WidgetInfo.FOSSIL_MUSHROOM_VALLEY);
     if (!Widgets.isVisible(mushroomValleyWidget)) {
-      return;
+      return 1;
     }
 
     mushroomValleyWidget.interact(
@@ -49,6 +49,7 @@ public class GoToVerdantValley extends Task {
         mushroomValleyWidget.getId());
 
     Time.sleepTicksUntil(() -> Players.getLocal().getWorldLocation().getRegionID() == 14906, 5);
-    Time.sleepTicks(2);
+
+    return 3;
   }
 }

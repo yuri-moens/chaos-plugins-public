@@ -38,10 +38,10 @@ public class Deposit extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     NPC leprechaun = NPCs.getNearest("Tool Leprechaun");
     if (leprechaun == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> leprechaun.interact("Exchange"));
@@ -64,7 +64,7 @@ public class Deposit extends BankTask {
 
     TileObject rope = TileObjects.getNearest("Anchor rope");
     if (rope == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> rope.interact("Climb"));
@@ -78,5 +78,7 @@ public class Deposit extends BankTask {
     Bank.depositInventory();
 
     close();
+
+    return 1;
   }
 }

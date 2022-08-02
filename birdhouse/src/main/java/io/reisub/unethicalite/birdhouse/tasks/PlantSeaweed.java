@@ -30,10 +30,10 @@ public class PlantSeaweed extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Item spore = Inventory.getFirst(ItemID.SEAWEED_SPORE);
     if (spore == null) {
-      return;
+      return 1;
     }
 
     int quantity = spore.getQuantity();
@@ -45,15 +45,15 @@ public class PlantSeaweed extends Task {
     Item compost = Inventory.getFirst(Predicates.ids(Constants.COMPOST_IDS));
 
     if (compost == null) {
-      return;
+      return 1;
     }
 
     patch = TileObjects.getNearest("Seaweed");
     if (patch == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> compost.useOn(patch));
-    Time.sleepTicks(3);
+    return 4;
   }
 }

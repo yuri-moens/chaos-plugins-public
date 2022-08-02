@@ -25,12 +25,14 @@ public class FillBag extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     int coalCount = Inventory.getCount(ItemID.COAL);
     plugin.setCoalInBag(plugin.getCoalInBag() + coalCount);
 
     Inventory.getFirst(ItemID.COAL_BAG_12019).interact("Fill");
     Time.sleepTicksUntil(() -> Inventory.getCount(ItemID.COAL) < coalCount, 3);
+
+    return 1;
   }
 
   @Subscribe

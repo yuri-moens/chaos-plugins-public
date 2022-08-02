@@ -29,12 +29,12 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     plugin.setActivity(Activity.BANKING);
 
     if (!open()) {
       plugin.setActivity(Activity.IDLE);
-      return;
+      return 1;
     }
 
     if (!Inventory.contains(ItemID.HAMMER, ItemID.IMCANDO_HAMMER)
@@ -76,5 +76,7 @@ public class HandleBank extends BankTask {
     } else {
       plugin.stop("Out of bars. Stopping plugin.");
     }
+
+    return 1;
   }
 }

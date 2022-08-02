@@ -41,7 +41,7 @@ public class GoToIsland extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     ChaosMovement.walkTo(
         target,
         2,
@@ -49,7 +49,7 @@ public class GoToIsland extends Task {
 
     TileObject rowBoat = TileObjects.getNearest(ObjectID.ROWBOAT_30915);
     if (rowBoat == null) {
-      return;
+      return 1;
     }
 
     while (Players.getLocal().distanceTo(BirdHouse.ISLAND) > 10) {
@@ -60,6 +60,6 @@ public class GoToIsland extends Task {
       Time.sleepTicksUntil(() -> Players.getLocal().distanceTo(BirdHouse.ISLAND) < 10, 5);
     }
 
-    Time.sleepTick();
+    return 2;
   }
 }

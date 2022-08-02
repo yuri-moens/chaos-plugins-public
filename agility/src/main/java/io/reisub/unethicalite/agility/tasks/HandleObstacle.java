@@ -51,7 +51,7 @@ public class HandleObstacle extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (Agility.DELAY_POINTS.contains(Players.getLocal().getWorldLocation())) {
       Time.sleepTick();
     }
@@ -74,22 +74,24 @@ public class HandleObstacle extends Task {
           && config.courseSelection().isReachable(portal)) {
         portal.interact(0);
         ready = false;
-        return;
+        return 1;
       }
     }
 
     int id = config.courseSelection().getNextObstacleId();
     if (id == 0) {
-      return;
+      return 1;
     }
 
     final TileObject obstacle = TileObjects.getNearest(id);
     if (obstacle == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> obstacle.interact(0));
     ready = false;
+
+    return 1;
   }
 
   @Subscribe

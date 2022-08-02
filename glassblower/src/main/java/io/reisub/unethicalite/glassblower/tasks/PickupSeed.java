@@ -26,7 +26,7 @@ public class PickupSeed extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     plugin.setActivity(Activity.IDLE);
 
     int quantity = Inventory.getCount(true, ItemID.SEAWEED_SPORE);
@@ -39,5 +39,7 @@ public class PickupSeed extends Task {
                 || Players.getLocal().getWorldLocation().getRegionID()
                     == Glassblower.FOSSIL_ISLAND_SMALL_ISLAND_REGION,
         30);
+
+    return 1;
   }
 }

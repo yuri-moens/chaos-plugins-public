@@ -32,7 +32,7 @@ public class PickupSpore extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     int quantity = Inventory.getCount(true, ItemID.SEAWEED_SPORE);
 
     do {
@@ -41,5 +41,7 @@ public class PickupSpore extends Task {
     } while (!Players.getLocal().isMoving());
 
     Time.sleepTicksUntil(() -> Inventory.getCount(true, ItemID.SEAWEED_SPORE) > quantity, 30);
+
+    return 1;
   }
 }

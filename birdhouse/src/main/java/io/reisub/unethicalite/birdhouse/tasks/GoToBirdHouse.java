@@ -26,7 +26,9 @@ public class GoToBirdHouse extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     ChaosMovement.walkTo(target, 2);
+
+    return 1;
   }
 }

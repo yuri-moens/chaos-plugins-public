@@ -28,7 +28,7 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (Players.getLocal().getWorldLocation().getRegionID() == ROGUES_DEN_REGION) {
       open("Emerald Benedict");
     } else {
@@ -50,5 +50,7 @@ public class HandleBank extends BankTask {
     plugin.setLastBank(Static.getClient().getTickCount());
 
     close();
+
+    return 1;
   }
 }

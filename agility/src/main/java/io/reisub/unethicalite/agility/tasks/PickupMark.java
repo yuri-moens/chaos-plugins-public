@@ -35,11 +35,13 @@ public class PickupMark extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Time.sleepTicksUntil(() -> Players.getLocal().isIdle(), 10);
 
     mark.interact("Take");
     Time.sleepTicksUntil(() -> TileItems.getNearest("Mark of grace") == null, 15);
+
+    return 1;
   }
 
   @Subscribe

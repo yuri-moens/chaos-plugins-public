@@ -32,7 +32,7 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     open(true);
 
     Bank.depositInventory();
@@ -65,7 +65,7 @@ public class HandleBank extends BankTask {
 
     TileObject rowBoat = TileObjects.getNearest(ObjectID.ROWBOAT_30919);
     if (rowBoat == null) {
-      return;
+      return 1;
     }
 
     rowBoat.interact("Dive");
@@ -79,5 +79,7 @@ public class HandleBank extends BankTask {
       Dialog.chooseOption(1);
       Time.sleepTicksUntil(() -> Players.getLocal().getWorldLocation().getRegionID() == 15008, 10);
     }
+
+    return 1;
   }
 }

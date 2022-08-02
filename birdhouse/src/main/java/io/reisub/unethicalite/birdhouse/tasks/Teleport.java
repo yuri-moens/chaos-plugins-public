@@ -27,11 +27,13 @@ public class Teleport extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     config.tpLocation().teleport(config.goThroughHouse(), config.goThroughHouseFallback());
 
     Inventory.getAll((i) -> i.hasAction("Search")).forEach((i) -> i.interact("Search"));
 
     plugin.stop();
+
+    return 1;
   }
 }

@@ -28,10 +28,10 @@ public class RepairPouch extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     final Widget npcContact = Widgets.get(SpellBook.Lunar.NPC_CONTACT.getWidget());
     if (npcContact == null) {
-      return;
+      return 1;
     }
 
     if (npcContact.hasAction("Dark Mage")) {
@@ -50,5 +50,7 @@ public class RepairPouch extends Task {
         DialogOption.CHAT_OPTION_TWO,
         DialogOption.PLAYER_CONTINUE,
         DialogOption.NPC_CONTINUE);
+
+    return 1;
   }
 }

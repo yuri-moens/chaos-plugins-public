@@ -53,12 +53,14 @@ public class EmptyBirdHouse extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     GameThread.invoke(() -> birdHouse.interact(2));
     if (!Time.sleepTicksUntil(() -> Inventory.contains(ItemID.CLOCKWORK), 15)) {
-      return;
+      return 1;
     }
 
     plugin.emptied(birdHouse.getId());
+
+    return 1;
   }
 }

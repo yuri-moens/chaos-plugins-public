@@ -20,15 +20,17 @@ public class CraftBirdhouse extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     final Item chisel = Inventory.getFirst(ItemID.CHISEL);
     final Item logs = Inventory.getFirst((i) -> Constants.LOG_IDS.contains(i.getId()));
 
     if (chisel == null || logs == null) {
-      return;
+      return 1;
     }
 
     chisel.useOn(logs);
     Time.sleepTicksUntil(() -> !Inventory.contains(ItemID.CLOCKWORK), 5);
+
+    return 1;
   }
 }

@@ -25,12 +25,12 @@ public class GoToBank extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (config.usePrayer()) {
       if (Prayers.getPoints() < 40) {
         TileObject altar = TileObjects.getNearest(ObjectID.CHAOS_ALTAR_411);
         if (altar == null) {
-          return;
+          return 1;
         }
 
         altar.interact("Pray-at");
@@ -40,11 +40,13 @@ public class GoToBank extends Task {
 
     TileObject ladder = TileObjects.getNearest(ObjectID.LADDER_29635);
     if (ladder == null) {
-      return;
+      return 1;
     }
 
     ladder.interact("Climb");
     Time.sleepTicksUntil(
         () -> Players.getLocal().getWorldLocation().getRegionID() != OVERWORLD_REGION_ID, 20);
+
+    return 1;
   }
 }

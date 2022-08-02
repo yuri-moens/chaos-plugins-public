@@ -27,14 +27,16 @@ public class Chop extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     final TileObject tree = TileObjects.getNearest(config.type().getNames());
 
     if (tree == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> tree.interact("Chop down"));
     Time.sleepTicksUntil(() -> Players.getLocal().isAnimating(), 15);
+
+    return 1;
   }
 }

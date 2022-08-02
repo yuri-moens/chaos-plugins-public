@@ -24,15 +24,17 @@ public class BuildBirdHouse extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     space = BirdHouseSpace.getNearest(BirdHouseState.EMPTY);
 
     if (space == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> space.interact(0));
     Time.sleepTicksUntil(
         () -> !Inventory.contains((i) -> Constants.BIRD_HOUSE_ITEM_IDS.contains(i.getId())), 5);
+
+    return 1;
   }
 }

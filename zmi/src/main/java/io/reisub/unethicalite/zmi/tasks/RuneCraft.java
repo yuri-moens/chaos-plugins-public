@@ -36,7 +36,7 @@ public class RuneCraft extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     last = Static.getClient().getTickCount();
     if (!Inventory.isFull()) {
       Zmi.pouchesAreEmpty = true;
@@ -44,7 +44,7 @@ public class RuneCraft extends Task {
 
     TileObject altar = TileObjects.getNearest(ObjectID.ALTAR_29631);
     if (altar == null) {
-      return;
+      return 1;
     }
 
     altar.interact("Craft-rune");
@@ -61,5 +61,7 @@ public class RuneCraft extends Task {
         }
       }
     }
+
+    return 1;
   }
 }

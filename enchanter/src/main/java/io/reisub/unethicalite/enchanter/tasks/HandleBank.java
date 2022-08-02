@@ -33,7 +33,7 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     open();
 
     ChaosBank.depositAllExcept(
@@ -58,9 +58,11 @@ public class HandleBank extends BankTask {
 
     if (!Bank.contains(Predicates.ids(ids))) {
       plugin.stop("No more items to enchant. Stopping plugin.");
-      return;
+      return 1;
     }
 
     Bank.withdrawAll(Predicates.ids(ids), Bank.WithdrawMode.ITEM);
+
+    return 1;
   }
 }

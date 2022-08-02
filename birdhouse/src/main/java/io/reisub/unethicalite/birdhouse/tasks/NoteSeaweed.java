@@ -26,14 +26,16 @@ public class NoteSeaweed extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Item seaweed = Inventory.getFirst(ItemID.GIANT_SEAWEED);
     NPC leprechaun = NPCs.getNearest("Tool Leprechaun");
     if (seaweed == null || leprechaun == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> seaweed.useOn(leprechaun));
     Time.sleepTicksUntil(() -> !Inventory.contains(ItemID.GIANT_SEAWEED), 30);
+
+    return 1;
   }
 }

@@ -34,14 +34,14 @@ public class Drop extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (Players.getLocal().distanceTo(HOSIDIUS_COOKING_SPOT) < 10
         && !Players.getLocal().getWorldLocation().equals(HOSIDIUS_COOKING_SPOT)) {
       Movement.walk(HOSIDIUS_COOKING_SPOT);
 
       if (!Time.sleepTicksUntil(
           () -> Players.getLocal().getWorldLocation().equals(HOSIDIUS_COOKING_SPOT), 10)) {
-        return;
+        return 1;
       }
     }
 
@@ -50,5 +50,7 @@ public class Drop extends Task {
     Time.sleepTick();
 
     plugin.setLastDrop(Static.getClient().getTickCount());
+
+    return 1;
   }
 }

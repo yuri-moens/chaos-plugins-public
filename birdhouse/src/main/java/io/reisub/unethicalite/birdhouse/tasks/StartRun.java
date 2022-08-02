@@ -36,7 +36,7 @@ public class StartRun extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     open(true);
 
     if (!Inventory.isEmpty()) {
@@ -99,7 +99,7 @@ public class StartRun extends BankTask {
     Inventory.getAll(i -> i.getName().startsWith("Graceful")).forEach(i -> i.interact("Wear"));
 
     if (!Time.sleepTicksUntil(this::hasEverything, 3)) {
-      return;
+      return 1;
     }
 
     if (Dialog.isOpen()) {
@@ -118,6 +118,8 @@ public class StartRun extends BankTask {
     }
 
     plugin.setManuallyStarted(false);
+
+    return 1;
   }
 
   public int getSeedId() {

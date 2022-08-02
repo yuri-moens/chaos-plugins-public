@@ -30,8 +30,10 @@ public class TeleportHouse extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Magic.cast(SpellBook.Standard.TELEPORT_TO_HOUSE);
     Time.sleepTicksUntil(() -> Static.getClient().isInInstancedRegion(), 5);
+
+    return 1;
   }
 }

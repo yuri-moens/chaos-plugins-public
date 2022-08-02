@@ -23,7 +23,7 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (config.disableRunFromShop() && Movement.isRunEnabled() && Movement.getRunEnergy() < 90) {
       Movement.toggleRun();
     }
@@ -33,7 +33,7 @@ public class HandleBank extends BankTask {
     }
 
     if (!open()) {
-      return;
+      return 1;
     }
 
     ChaosBank.depositAllExcept(false, "Coins", "Tokkul", "Coal bag");
@@ -41,5 +41,7 @@ public class HandleBank extends BankTask {
     if (Inventory.contains(ItemID.COAL_BAG_12019) && plugin.getCoalInBag() > 0) {
       ChaosBank.bankInventoryInteract(Bank.Inventory.getFirst(ItemID.COAL_BAG_12019), "Empty");
     }
+
+    return 1;
   }
 }

@@ -33,7 +33,7 @@ public class Enchant extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     List<Item> items;
 
     if (config.item() == EnchantItem.ALL) {
@@ -51,5 +51,7 @@ public class Enchant extends Task {
           Magic.cast(config.spell().getSpell(), i);
           Time.sleepTicks(3);
         });
+
+    return 1;
   }
 }

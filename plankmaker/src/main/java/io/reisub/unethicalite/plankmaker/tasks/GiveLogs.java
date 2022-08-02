@@ -42,7 +42,7 @@ public class GiveLogs extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Time.sleepTick();
 
     final NPC butler = NPCs.getNearest(Predicates.ids(NpcID.DEMON_BUTLER, NpcID.DEMON_BUTLER_7331));
@@ -51,7 +51,7 @@ public class GiveLogs extends Task {
       houseOptions.interact(0);
 
       if (!Time.sleepTicksUntil(() -> Widgets.isVisible(Widgets.fromId(CALL_SERVANT_WIDGET)), 3)) {
-        return;
+        return 1;
       }
 
       Widgets.fromId(CALL_SERVANT_WIDGET).interact(0);
@@ -62,14 +62,14 @@ public class GiveLogs extends Task {
       final NPC calledButler =
           NPCs.getNearest(Predicates.ids(NpcID.DEMON_BUTLER, NpcID.DEMON_BUTLER_7331));
       if (calledButler == null) {
-        return;
+        return 1;
       }
 
       GameThread.invoke(() -> calledButler.interact(0));
     }
 
     if (!Time.sleepTicksUntil(Dialog::isOpen, 10)) {
-      return;
+      return 1;
     }
 
     if (Dialog.canContinueNPC()) {
@@ -89,7 +89,7 @@ public class GiveLogs extends Task {
                 NPCs.getNearest(Predicates.ids(NpcID.DEMON_BUTLER, NpcID.DEMON_BUTLER_7331))
                     != null,
             10);
-        return;
+        return 1;
       } else {
         Dialog.invokeDialog(
             DialogOption.NPC_CONTINUE,
@@ -111,6 +111,7 @@ public class GiveLogs extends Task {
     PlankMaker.lastGive = Static.getClient().getTickCount();
 
     Time.sleepTicksUntil(() -> !Inventory.contains(config.logType().getLogId()), 5);
-    Time.sleepTicks(3);
+
+    return 4;
   }
 }

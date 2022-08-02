@@ -24,9 +24,10 @@ public class Teleport extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Magic.cast(SpellBook.Lunar.OURANIA_TELEPORT);
     Time.sleepTicksUntil(() -> Players.getLocal().distanceTo(Zmi.NEAR_ALTAR) > 5, 10);
-    Time.sleepTick();
+
+    return 2;
   }
 }

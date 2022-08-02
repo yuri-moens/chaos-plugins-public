@@ -70,7 +70,7 @@ public class Buy extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     int freeSlots = Inventory.getFreeSlots();
 
     for (Map.Entry<BuyItem, Integer> order : buyMap.entrySet()) {
@@ -129,5 +129,7 @@ public class Buy extends Task {
     if (freeSlots > 0) {
       plugin.setHop(true);
     }
+
+    return 1;
   }
 }

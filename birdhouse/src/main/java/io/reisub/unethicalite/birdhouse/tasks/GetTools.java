@@ -39,11 +39,11 @@ public class GetTools extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Time.sleepTick();
     NPC leprechaun = NPCs.getNearest("Tool Leprechaun");
     if (leprechaun == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> leprechaun.interact("Exchange"));
@@ -73,6 +73,8 @@ public class GetTools extends Task {
 
     BirdHouse.CLOSE.get().interact("Close");
     Time.sleepTicksUntil(() -> Inventory.contains(ItemID.SEED_DIBBER), 5);
+
+    return 1;
   }
 
   private int getCompostCount(Widget compostWidget) {

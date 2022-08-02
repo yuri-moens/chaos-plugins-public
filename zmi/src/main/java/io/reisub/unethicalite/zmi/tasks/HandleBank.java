@@ -28,11 +28,11 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Time.sleepTick();
 
     if (!open("Eniola")) {
-      return;
+      return 1;
     }
 
     ChaosBank.depositAllExcept(
@@ -84,5 +84,7 @@ public class HandleBank extends BankTask {
 
       Bank.withdrawAll(essenceId, Bank.WithdrawMode.ITEM);
     }
+
+    return 1;
   }
 }

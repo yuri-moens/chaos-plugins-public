@@ -25,8 +25,10 @@ public class TeleportCamelot extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Magic.cast(SpellBook.Standard.CAMELOT_TELEPORT);
     Time.sleepTicksUntil(() -> !Static.getClient().isInInstancedRegion(), 5);
+
+    return 1;
   }
 }

@@ -50,7 +50,7 @@ public class Alch extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     ready = false;
 
     if (Agility.DELAY_POINTS.contains(Players.getLocal().getWorldLocation())) {
@@ -60,11 +60,13 @@ public class Alch extends Task {
     final Item item = Inventory.getFirst(ChaosPredicates.itemConfigList(configList));
 
     if (item == null) {
-      return;
+      return 1;
     }
 
     SpellBook.Standard.HIGH_LEVEL_ALCHEMY.castOn(item);
     lastTick = Static.getClient().getTickCount();
+
+    return 1;
   }
 
   @Subscribe

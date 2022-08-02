@@ -40,10 +40,12 @@ public class Run extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Movement.toggleRun();
     threshold = Rand.nextInt(min, max);
     last = Static.getClient().getTickCount();
+
+    return 1;
   }
 
   public void setRange(int min, int max) {

@@ -35,13 +35,13 @@ public class Blow extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (config.pickUpSeaweedSpores()
         && Players.getLocal().getWorldLocation().getRegionID()
             == Glassblower.FOSSIL_ISLAND_SMALL_ISLAND_REGION) {
       TileObject rowBoat = TileObjects.getNearest(ObjectID.ROWBOAT_30919);
       if (rowBoat == null) {
-        return;
+        return 1;
       }
 
       rowBoat.interact("Dive");
@@ -65,7 +65,7 @@ public class Blow extends Task {
     }
 
     if (config.pickUpSeaweedSpores() && TileItems.getNearest(ItemID.SEAWEED_SPORE) != null) {
-      return;
+      return 1;
     }
 
     Inventory.getFirst(ItemID.GLASSBLOWING_PIPE).useOn(Inventory.getFirst(ItemID.MOLTEN_GLASS));
@@ -77,12 +77,14 @@ public class Blow extends Task {
               : config.targetProduct();
 
       if (product == null) {
-        return;
+        return 1;
       }
 
       Production.chooseOption(product.getOption());
 
       Time.sleepTicksUntil(() -> plugin.getCurrentActivity() == Activity.GLASSBLOWING, 5);
     }
+
+    return 1;
   }
 }

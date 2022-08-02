@@ -31,10 +31,10 @@ public class SonicCook extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     TileItem food = TileItems.getFirstAt(Players.getLocal().getWorldLocation(), config.foodId());
     if (food == null) {
-      return;
+      return 1;
     }
 
     food.interact("Take");
@@ -43,7 +43,7 @@ public class SonicCook extends Task {
     TileObject oven = TileObjects.getNearest(ObjectID.CLAY_OVEN_21302, ObjectID.RANGE_31631);
     TileObject fire = TileObjects.getNearest("Fire");
     if (oven == null && fire == null) {
-      return;
+      return 1;
     }
 
     if (oven != null) {
@@ -51,12 +51,12 @@ public class SonicCook extends Task {
     } else {
       Item rawFood = Inventory.getFirst(config.foodId());
       if (rawFood == null) {
-        return;
+        return 1;
       }
 
       rawFood.useOn(fire);
     }
 
-    Time.sleepTick();
+    return 2;
   }
 }

@@ -37,11 +37,11 @@ public class Cook extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     TileObject oven = TileObjects.getNearest(ObjectID.CLAY_OVEN_21302, ObjectID.RANGE_31631);
     TileObject fire = TileObjects.getNearest("Fire");
     if (oven == null && fire == null) {
-      return;
+      return 1;
     }
 
     int count = Inventory.getCount(config.foodId());
@@ -51,7 +51,7 @@ public class Cook extends Task {
     } else {
       Item rawFood = Inventory.getFirst(config.foodId());
       if (rawFood == null) {
-        return;
+        return 1;
       }
 
       rawFood.useOn(fire);
@@ -69,5 +69,7 @@ public class Cook extends Task {
     }
 
     last = Static.getClient().getTickCount();
+
+    return 1;
   }
 }

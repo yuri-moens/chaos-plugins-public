@@ -23,7 +23,7 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     open(true);
 
     if (!Inventory.contains("Coins")) {
@@ -32,5 +32,7 @@ public class HandleBank extends BankTask {
 
     Bank.withdrawAll(config.logType().getLogId(), WithdrawMode.ITEM);
     Time.sleepTicksUntil(() -> Inventory.contains(config.logType().getLogId()), 3);
+
+    return 1;
   }
 }

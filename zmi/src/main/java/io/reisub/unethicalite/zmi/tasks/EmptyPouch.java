@@ -23,7 +23,7 @@ public class EmptyPouch extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     Inventory.getAll(Predicates.ids(Constants.ESSENCE_POUCH_IDS))
         .forEach((i) -> i.interact("Empty"));
 
@@ -37,5 +37,7 @@ public class EmptyPouch extends Task {
     }
 
     Zmi.lastEmpty = Static.getClient().getTickCount();
+
+    return 1;
   }
 }

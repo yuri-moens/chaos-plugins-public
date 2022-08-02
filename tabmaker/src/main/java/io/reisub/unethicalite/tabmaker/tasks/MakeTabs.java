@@ -35,7 +35,7 @@ public class MakeTabs extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (!Static.getClient().isInInstancedRegion()) {
       Magic.cast(Standard.TELEPORT_TO_HOUSE);
 
@@ -46,7 +46,7 @@ public class MakeTabs extends Task {
     final TileObject lectern = TileObjects.getNearest("Lectern");
 
     if (lectern == null) {
-      return;
+      return 1;
     }
 
     lectern.interact(0);
@@ -56,10 +56,12 @@ public class MakeTabs extends Task {
     final Widget tabWidget = Widgets.get(79, config.tab().getId());
 
     if (tabWidget == null) {
-      return;
+      return 1;
     }
 
     plugin.setActivity(Activity.MAKING_TABS);
     tabWidget.interact(0);
+
+    return 1;
   }
 }

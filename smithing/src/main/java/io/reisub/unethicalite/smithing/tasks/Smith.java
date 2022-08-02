@@ -36,7 +36,7 @@ public class Smith extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     TileObject anvil;
     if (Players.getLocal().getWorldLocation().getRegionID() == PRIFDDINAS_REGION) {
       anvil =
@@ -47,7 +47,7 @@ public class Smith extends Task {
     }
 
     if (anvil == null) {
-      return;
+      return 1;
     }
 
     anvil.interact(0);
@@ -56,10 +56,12 @@ public class Smith extends Task {
 
     Widget productWidget = Widgets.get(312, config.product().getInterfaceId());
     if (productWidget == null) {
-      return;
+      return 1;
     }
 
     productWidget.interact(0);
     Time.sleepTicksUntil(() -> plugin.getCurrentActivity() == Activity.SMITHING, 10);
+
+    return 1;
   }
 }

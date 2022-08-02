@@ -26,7 +26,7 @@ public class OpenPacks extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (Shop.isOpen()) {
       DialogPackets.closeInterface();
     }
@@ -34,5 +34,7 @@ public class OpenPacks extends Task {
     Inventory.getAll((i) -> i.hasAction("Open") && i.getName().contains("pack"))
         .forEach((i) -> i.interact("Open"));
     last = Static.getClient().getTickCount();
+
+    return 1;
   }
 }

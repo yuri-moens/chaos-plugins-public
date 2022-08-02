@@ -32,7 +32,7 @@ public class OpenShop extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (!Movement.isRunEnabled() && Movement.getRunEnergy() >= Rand.nextInt(20, 40)) {
       Movement.toggleRun();
     }
@@ -45,19 +45,21 @@ public class OpenShop extends Task {
       TileObject obj = TileObjects.getNearest(config.npcName());
 
       if (obj == null) {
-        return;
+        return 1;
       }
 
       GameThread.invoke(() -> obj.interact(config.tradeAction()));
     } else {
       NPC npc = NPCs.getNearest(config.npcName());
       if (npc == null) {
-        return;
+        return 1;
       }
 
       GameThread.invoke(() -> npc.interact(config.tradeAction()));
     }
 
     Time.sleepTicksUntil(Shop::isOpen, 20);
+
+    return 1;
   }
 }

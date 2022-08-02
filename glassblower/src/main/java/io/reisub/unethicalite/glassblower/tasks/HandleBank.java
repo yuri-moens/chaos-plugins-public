@@ -27,14 +27,14 @@ public class HandleBank extends BankTask {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     plugin.setActivity(Activity.IDLE);
 
     if (Players.getLocal().getWorldLocation().getRegionID()
         == Glassblower.FOSSIL_ISLAND_UNDERWATER_REGION) {
       TileObject rope = TileObjects.getNearest("Anchor rope");
       if (rope == null) {
-        return;
+        return 1;
       }
 
       rope.interact("Climb");
@@ -44,11 +44,11 @@ public class HandleBank extends BankTask {
                       == Glassblower.FOSSIL_ISLAND_SMALL_ISLAND_REGION
                   || TileItems.getNearest(ItemID.SEAWEED_SPORE) != null,
           30)) {
-        return;
+        return 1;
       }
 
       if (TileItems.getNearest(ItemID.SEAWEED_SPORE) != null) {
-        return;
+        return 1;
       }
 
       Time.sleepTick();
@@ -71,5 +71,7 @@ public class HandleBank extends BankTask {
     }
 
     Bank.withdrawAll(ItemID.MOLTEN_GLASS, Bank.WithdrawMode.ITEM);
+
+    return 1;
   }
 }

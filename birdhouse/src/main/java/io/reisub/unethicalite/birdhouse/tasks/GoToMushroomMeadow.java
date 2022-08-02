@@ -26,10 +26,10 @@ public class GoToMushroomMeadow extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     TileObject tree = TileObjects.getNearest(i -> Constants.MAGIC_MUSHTREE_IDS.contains(i.getId()));
     if (tree == null) {
-      return;
+      return 1;
     }
 
     GameThread.invoke(() -> tree.interact(0));
@@ -38,7 +38,7 @@ public class GoToMushroomMeadow extends Task {
 
     Widget mushroomMeadowWidget = Widgets.get(WidgetInfo.FOSSIL_MUSHROOM_MEADOW);
     if (!Widgets.isVisible(mushroomMeadowWidget)) {
-      return;
+      return 1;
     }
 
     mushroomMeadowWidget.interact(
@@ -48,6 +48,7 @@ public class GoToMushroomMeadow extends Task {
         mushroomMeadowWidget.getId());
 
     Time.sleepTicksUntil(() -> Players.getLocal().getWorldLocation().getRegionID() == 14652, 5);
-    Time.sleepTicks(2);
+
+    return -3;
   }
 }

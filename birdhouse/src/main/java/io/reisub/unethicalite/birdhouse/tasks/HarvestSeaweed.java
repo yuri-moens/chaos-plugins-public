@@ -34,7 +34,7 @@ public class HarvestSeaweed extends Task {
   }
 
   @Override
-  public void execute() {
+  public int execute() {
     if (seaweed.hasAction("Pick")) {
       int count = TileObjects.getAll((o) -> o.hasAction("Pick")).size();
 
@@ -51,5 +51,7 @@ public class HarvestSeaweed extends Task {
       GameThread.invoke(() -> seaweed.interact("Clear"));
       Time.sleepTicksUntil(() -> TileObjects.getAll("Dead seaweed").size() < count, 30);
     }
+
+    return 1;
   }
 }
