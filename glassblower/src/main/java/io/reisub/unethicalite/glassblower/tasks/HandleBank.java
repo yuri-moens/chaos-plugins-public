@@ -2,8 +2,8 @@ package io.reisub.unethicalite.glassblower.tasks;
 
 import io.reisub.unethicalite.glassblower.Config;
 import io.reisub.unethicalite.glassblower.Glassblower;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.api.ChaosBank;
-import io.reisub.unethicalite.utils.enums.Activity;
 import io.reisub.unethicalite.utils.tasks.BankTask;
 import java.time.Duration;
 import javax.inject.Inject;

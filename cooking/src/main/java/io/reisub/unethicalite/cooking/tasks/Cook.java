@@ -2,7 +2,8 @@ package io.reisub.unethicalite.cooking.tasks;
 
 import io.reisub.unethicalite.cooking.Config;
 import io.reisub.unethicalite.cooking.Cooking;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.cooking.data.PluginActivity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Item;
@@ -31,7 +32,7 @@ public class Cook extends Task {
     int count = Inventory.getCount(config.foodId());
 
     return !config.sonicMode()
-        && (plugin.getCurrentActivity() == Activity.IDLE || count == 1)
+        && (plugin.isCurrentActivity(Activity.IDLE) || count == 1)
         && (count > 0 || plugin.getLastBank() + 1 >= Static.getClient().getTickCount())
         && Static.getClient().getTickCount() >= last + 3;
   }
@@ -65,7 +66,7 @@ public class Cook extends Task {
     if (Production.isOpen()) {
       Production.chooseOption(1);
 
-      Time.sleepTicksUntil(() -> plugin.getCurrentActivity() == Activity.COOKING, 5);
+      Time.sleepTicksUntil(() -> plugin.isCurrentActivity(PluginActivity.COOKING), 5);
     }
 
     last = Static.getClient().getTickCount();

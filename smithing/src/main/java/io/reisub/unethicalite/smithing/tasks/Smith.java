@@ -2,8 +2,9 @@ package io.reisub.unethicalite.smithing.tasks;
 
 import io.reisub.unethicalite.smithing.Config;
 import io.reisub.unethicalite.smithing.Smithing;
+import io.reisub.unethicalite.smithing.data.PluginActivity;
 import io.reisub.unethicalite.utils.Constants;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import lombok.AllArgsConstructor;
 import net.runelite.api.TileObject;
@@ -30,9 +31,9 @@ public class Smith extends Task {
 
   @Override
   public boolean validate() {
-    return plugin.getCurrentActivity() == Activity.IDLE
+    return plugin.isCurrentActivity(Activity.IDLE)
         && (Inventory.getCount(config.metal().getBarId()) >= config.product().getRequiredBars()
-            || plugin.getPreviousActivity() == Activity.BANKING);
+            || plugin.wasPreviousActivity(Activity.BANKING));
   }
 
   @Override
@@ -60,6 +61,6 @@ public class Smith extends Task {
     }
 
     productWidget.interact(0);
-    Time.sleepTicksUntil(() -> plugin.getCurrentActivity() == Activity.SMITHING, 10);
+    Time.sleepTicksUntil(() -> plugin.isCurrentActivity(PluginActivity.SMITHING), 10);
   }
 }

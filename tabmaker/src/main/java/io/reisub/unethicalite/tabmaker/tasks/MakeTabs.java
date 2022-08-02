@@ -2,7 +2,8 @@ package io.reisub.unethicalite.tabmaker.tasks;
 
 import io.reisub.unethicalite.tabmaker.Config;
 import io.reisub.unethicalite.tabmaker.TabMaker;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.tabmaker.data.PluginActivity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import javax.inject.Inject;
 import net.runelite.api.ItemID;
@@ -31,7 +32,7 @@ public class MakeTabs extends Task {
   @Override
   public boolean validate() {
     return Inventory.contains(ItemID.SOFT_CLAY)
-        && plugin.getCurrentActivity() == Activity.IDLE;
+        && plugin.isCurrentActivity(Activity.IDLE);
   }
 
   @Override
@@ -59,7 +60,7 @@ public class MakeTabs extends Task {
       return;
     }
 
-    plugin.setActivity(Activity.MAKING_TABS);
+    plugin.setActivity(PluginActivity.MAKING_TABS);
     tabWidget.interact(0);
   }
 }

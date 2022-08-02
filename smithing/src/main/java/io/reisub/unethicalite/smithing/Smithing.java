@@ -1,13 +1,13 @@
 package io.reisub.unethicalite.smithing;
 
 import com.google.inject.Provides;
+import io.reisub.unethicalite.smithing.data.PluginActivity;
 import io.reisub.unethicalite.smithing.tasks.HandleBank;
 import io.reisub.unethicalite.smithing.tasks.Smith;
 import io.reisub.unethicalite.utils.TickScript;
 import io.reisub.unethicalite.utils.Utils;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Run;
-import java.time.Duration;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +47,7 @@ public class Smithing extends TickScript {
   protected void onStart() {
     super.onStart();
 
-    lastActionTimeout = Duration.ofSeconds(5);
+    lastActionTimeout = 9;
     itemsMade = 0;
     lastBarCount = Inventory.getCount(config.metal().getBarId());
 
@@ -71,7 +71,7 @@ public class Smithing extends TickScript {
     lastBarCount = count;
 
     if (count < config.product().getRequiredBars()
-        && currentActivity == Activity.SMITHING) {
+        && isCurrentActivity(PluginActivity.SMITHING)) {
       setActivity(Activity.IDLE);
     }
   }
@@ -85,7 +85,7 @@ public class Smithing extends TickScript {
     switch (Players.getLocal().getAnimation()) {
       case AnimationID.SMITHING_ANVIL:
       case AnimationID.SMITHING_IMCANDO_HAMMER:
-        setActivity(Activity.SMITHING);
+        setActivity(PluginActivity.SMITHING);
         break;
       default:
     }

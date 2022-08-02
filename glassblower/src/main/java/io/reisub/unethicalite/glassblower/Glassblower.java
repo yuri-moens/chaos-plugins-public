@@ -1,12 +1,12 @@
 package io.reisub.unethicalite.glassblower;
 
 import com.google.inject.Provides;
+import io.reisub.unethicalite.glassblower.data.PluginActivity;
 import io.reisub.unethicalite.glassblower.tasks.Blow;
 import io.reisub.unethicalite.glassblower.tasks.HandleBank;
 import io.reisub.unethicalite.glassblower.tasks.PickupSeed;
 import io.reisub.unethicalite.utils.TickScript;
 import io.reisub.unethicalite.utils.Utils;
-import io.reisub.unethicalite.utils.enums.Activity;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Skill;
@@ -38,7 +38,7 @@ public class Glassblower extends TickScript {
   protected void onStart() {
     super.onStart();
 
-    idleCheckSkills.put(Skill.CRAFTING, Activity.GLASSBLOWING);
+    idleCheckSkills.put(Skill.CRAFTING, PluginActivity.GLASSBLOWING);
 
     addTask(PickupSeed.class);
     addTask(HandleBank.class);
@@ -48,7 +48,7 @@ public class Glassblower extends TickScript {
   @Subscribe
   private void onStatChanged(StatChanged event) {
     if (event.getSkill() == Skill.CRAFTING) {
-      setActivity(Activity.GLASSBLOWING);
+      setActivity(PluginActivity.GLASSBLOWING);
     }
   }
 }

@@ -2,8 +2,8 @@ package io.reisub.unethicalite.smithing.tasks;
 
 import io.reisub.unethicalite.smithing.Config;
 import io.reisub.unethicalite.smithing.Smithing;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.api.ChaosBank;
-import io.reisub.unethicalite.utils.enums.Activity;
 import io.reisub.unethicalite.utils.tasks.BankTask;
 import java.time.Duration;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class HandleBank extends BankTask {
 
   @Override
   public boolean validate() {
-    return plugin.getCurrentActivity() == Activity.IDLE
+    return plugin.isCurrentActivity(Activity.IDLE)
         && isLastBankDurationAgo(Duration.ofSeconds(3))
         && Inventory.getCount(config.metal().getBarId()) < config.product().getRequiredBars();
   }

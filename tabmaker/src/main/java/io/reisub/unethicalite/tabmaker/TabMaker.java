@@ -1,11 +1,12 @@
 package io.reisub.unethicalite.tabmaker;
 
 import com.google.inject.Provides;
+import io.reisub.unethicalite.tabmaker.data.PluginActivity;
 import io.reisub.unethicalite.tabmaker.tasks.HandleBank;
 import io.reisub.unethicalite.tabmaker.tasks.MakeTabs;
 import io.reisub.unethicalite.utils.TickScript;
 import io.reisub.unethicalite.utils.Utils;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ItemID;
@@ -48,7 +49,7 @@ public class TabMaker extends TickScript {
       return;
     }
 
-    if (currentActivity == Activity.MAKING_TABS && !Inventory.contains(ItemID.SOFT_CLAY)) {
+    if (isCurrentActivity(PluginActivity.MAKING_TABS) && !Inventory.contains(ItemID.SOFT_CLAY)) {
       setActivity(Activity.IDLE);
     }
   }

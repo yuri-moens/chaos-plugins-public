@@ -2,7 +2,7 @@ package io.reisub.unethicalite.cooking.tasks;
 
 import io.reisub.unethicalite.cooking.Config;
 import io.reisub.unethicalite.cooking.Cooking;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.coords.WorldPoint;
@@ -28,7 +28,7 @@ public class Drop extends Task {
   public boolean validate() {
     int count = Inventory.getCount(config.foodId());
     return config.sonicMode()
-        && (plugin.getCurrentActivity() == Activity.IDLE || count == 1)
+        && (plugin.isCurrentActivity(Activity.IDLE) || count == 1)
         && (count > 0 || plugin.getLastBank() + 1 >= Static.getClient().getTickCount())
         && Static.getClient().getTickCount() >= plugin.getLastDrop() + 3;
   }

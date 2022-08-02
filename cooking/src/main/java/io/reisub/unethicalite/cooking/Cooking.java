@@ -7,7 +7,7 @@ import io.reisub.unethicalite.cooking.tasks.HandleBank;
 import io.reisub.unethicalite.cooking.tasks.SonicCook;
 import io.reisub.unethicalite.utils.TickScript;
 import io.reisub.unethicalite.utils.Utils;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +31,9 @@ import org.pf4j.Extension;
 @Slf4j
 @Extension
 public class Cooking extends TickScript {
+
+  public static final Activity COOKING = new Activity("Cooking");
+
   @Inject private Config config;
   @Getter @Setter private int lastBank;
   @Getter @Setter private int lastDrop;
@@ -59,7 +62,7 @@ public class Cooking extends TickScript {
     switch (Players.getLocal().getAnimation()) {
       case AnimationID.COOKING_FIRE:
       case AnimationID.COOKING_RANGE:
-        setActivity(Activity.COOKING);
+        setActivity(COOKING);
         break;
       default:
     }
@@ -71,7 +74,7 @@ public class Cooking extends TickScript {
       return;
     }
 
-    if (currentActivity == Activity.COOKING && !Inventory.contains(config.foodId())) {
+    if (isCurrentActivity(COOKING) && !Inventory.contains(config.foodId())) {
       setActivity(Activity.IDLE);
     }
   }

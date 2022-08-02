@@ -1,7 +1,7 @@
 package io.reisub.unethicalite.glassblower.tasks;
 
 import io.reisub.unethicalite.glassblower.Glassblower;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import javax.inject.Inject;
 import net.runelite.api.ItemID;

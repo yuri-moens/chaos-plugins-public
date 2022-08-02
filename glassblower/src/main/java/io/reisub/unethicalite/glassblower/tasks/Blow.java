@@ -3,7 +3,8 @@ package io.reisub.unethicalite.glassblower.tasks;
 import io.reisub.unethicalite.glassblower.Config;
 import io.reisub.unethicalite.glassblower.Glassblower;
 import io.reisub.unethicalite.glassblower.Product;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.glassblower.data.PluginActivity;
+import io.reisub.unethicalite.utils.api.Activity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import javax.inject.Inject;
 import net.runelite.api.ItemID;
@@ -29,7 +30,7 @@ public class Blow extends Task {
 
   @Override
   public boolean validate() {
-    return plugin.getCurrentActivity() == Activity.IDLE
+    return plugin.isCurrentActivity(Activity.IDLE)
         && Inventory.contains(ItemID.GLASSBLOWING_PIPE)
         && Inventory.contains(ItemID.MOLTEN_GLASS);
   }
@@ -82,7 +83,7 @@ public class Blow extends Task {
 
       Production.chooseOption(product.getOption());
 
-      Time.sleepTicksUntil(() -> plugin.getCurrentActivity() == Activity.GLASSBLOWING, 5);
+      Time.sleepTicksUntil(() -> plugin.isCurrentActivity(PluginActivity.GLASSBLOWING), 5);
     }
   }
 }

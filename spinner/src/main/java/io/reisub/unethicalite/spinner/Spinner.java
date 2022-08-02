@@ -1,13 +1,14 @@
 package io.reisub.unethicalite.spinner;
 
 import com.google.inject.Provides;
+import io.reisub.unethicalite.spinner.data.PluginActivity;
 import io.reisub.unethicalite.spinner.tasks.GoToBank;
 import io.reisub.unethicalite.spinner.tasks.GoToWheel;
 import io.reisub.unethicalite.spinner.tasks.HandleBank;
 import io.reisub.unethicalite.spinner.tasks.Spin;
 import io.reisub.unethicalite.utils.TickScript;
 import io.reisub.unethicalite.utils.Utils;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.utils.api.Activity;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,7 +58,8 @@ public class Spinner extends TickScript {
       return;
     }
 
-    if (currentActivity == Activity.SPINNING && !Inventory.contains(config.material().getId())) {
+    if (isCurrentActivity(PluginActivity.SPINNING)
+        && !Inventory.contains(config.material().getId())) {
       setActivity(Activity.IDLE);
     }
   }

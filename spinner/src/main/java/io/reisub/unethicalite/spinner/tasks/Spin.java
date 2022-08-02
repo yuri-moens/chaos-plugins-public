@@ -3,7 +3,7 @@ package io.reisub.unethicalite.spinner.tasks;
 import com.google.common.collect.ImmutableSet;
 import io.reisub.unethicalite.spinner.Config;
 import io.reisub.unethicalite.spinner.Spinner;
-import io.reisub.unethicalite.utils.enums.Activity;
+import io.reisub.unethicalite.spinner.data.PluginActivity;
 import io.reisub.unethicalite.utils.tasks.Task;
 import java.util.Set;
 import javax.inject.Inject;
@@ -42,13 +42,13 @@ public class Spin extends Task {
 
   @Override
   public boolean validate() {
-    return plugin.getCurrentActivity() != Activity.SPINNING
+    return plugin.isCurrentActivity(PluginActivity.SPINNING)
         && Inventory.contains(config.material().getId());
   }
 
   @Override
   public void execute() {
-    plugin.setActivity(Activity.SPINNING);
+    plugin.setActivity(PluginActivity.SPINNING);
 
     final TileObject wheel = TileObjects.getNearest(Predicates.ids(SPINNING_WHEEL_IDS));
 
