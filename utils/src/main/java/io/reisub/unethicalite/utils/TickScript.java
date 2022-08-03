@@ -247,7 +247,7 @@ public abstract class TickScript extends Plugin implements KeyListener {
   }
 
   protected final <T extends Task> void addTask(Class<T> type) {
-    tasks.add(injector.getInstance(type));
+    addTask(injector.getInstance(type));
   }
 
   protected void checkActionTimeout() {
