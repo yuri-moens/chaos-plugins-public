@@ -11,7 +11,7 @@ import net.unethicalite.api.entities.Players;
 @AllArgsConstructor
 public class GoToBirdHouse extends Task {
   private final BirdHouse plugin;
-  private final WorldPoint target = new WorldPoint(3681, 3819, 0);
+  private final WorldPoint target = new WorldPoint(3680, 3815, 0);
 
   @Override
   public String getStatus() {
@@ -27,6 +27,6 @@ public class GoToBirdHouse extends Task {
 
   @Override
   public void execute() {
-    ChaosMovement.walkTo(target, 2);
+    ChaosMovement.walkTo(target);
   }
 }
