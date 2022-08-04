@@ -50,7 +50,7 @@ public class GoToBank extends Task {
       Time.sleepTicksUntil(() -> Static.getClient().getGameState() != GameState.LOADING
           && !Players.getLocal().getWorldLocation().equals(current), 5);
     } else {
-      ChaosMovement.walkTo(config.location().getBankLocation(), 1);
+      ChaosMovement.walkTo(config.location().getBankLocation());
     }
   }
 }

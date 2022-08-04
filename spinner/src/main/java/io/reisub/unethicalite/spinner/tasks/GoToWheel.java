@@ -30,6 +30,6 @@ public class GoToWheel extends Task {
 
   @Override
   public void execute() {
-    ChaosMovement.walkTo(config.location().getSpinLocation(), 1);
+    ChaosMovement.walkTo(config.location().getSpinLocation());
   }
 }

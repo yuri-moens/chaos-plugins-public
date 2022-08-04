@@ -13,7 +13,7 @@ public interface Config extends net.runelite.client.config.Config {
       description = "Select your location",
       position = 0)
   default Location location() {
-    return Location.LUMBRDIGE;
+    return Location.LUMBRIDGE;
   }
 
   @ConfigItem(

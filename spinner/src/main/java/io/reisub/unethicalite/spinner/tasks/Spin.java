@@ -2,18 +2,22 @@ package io.reisub.unethicalite.spinner.tasks;
 
 import com.google.common.collect.ImmutableSet;
 import io.reisub.unethicalite.spinner.Config;
+import io.reisub.unethicalite.spinner.Location;
 import io.reisub.unethicalite.spinner.Spinner;
 import io.reisub.unethicalite.spinner.data.PluginActivity;
+import io.reisub.unethicalite.utils.api.ChaosMovement;
 import io.reisub.unethicalite.utils.tasks.Task;
 import java.util.Set;
 import javax.inject.Inject;
 import net.runelite.api.ObjectID;
 import net.runelite.api.TileObject;
+import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.GameThread;
 import net.unethicalite.api.items.Inventory;
+import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.widgets.Production;
 
 public class Spin extends Task {
@@ -42,7 +46,7 @@ public class Spin extends Task {
 
   @Override
   public boolean validate() {
-    return plugin.isCurrentActivity(PluginActivity.SPINNING)
+    return !plugin.isCurrentActivity(PluginActivity.SPINNING)
         && Inventory.contains(config.material().getId());
   }
 
@@ -54,6 +58,10 @@ public class Spin extends Task {
 
     if (wheel == null) {
       return;
+    }
+
+    if (config.location() == Location.LUMBRIDGE && !Reachable.isInteractable(wheel)) {
+      ChaosMovement.openDoor(wheel, ImmutableSet.of(new WorldPoint(3207, 3210, 1)));
     }
 
     GameThread.invoke(() -> wheel.interact("Spin"));
