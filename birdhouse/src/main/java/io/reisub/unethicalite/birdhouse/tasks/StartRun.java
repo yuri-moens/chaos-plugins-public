@@ -77,6 +77,8 @@ public class StartRun extends BankTask {
       Bank.withdraw(Predicates.ids(Constants.DIGSITE_PENDANT_IDS), 1, Bank.WithdrawMode.ITEM);
     }
 
+    Time.sleepTick();
+
     config.tpLocation().withdrawItems(
         config.goThroughHouse(),
         config.goThroughHouseFallback(),
@@ -84,7 +86,6 @@ public class StartRun extends BankTask {
     );
 
     if (config.equipGraceful() && ChaosBank.haveGracefulInBank()) {
-      Time.sleepTick();
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_CAPE), 1, Bank.WithdrawMode.ITEM);
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_BOOTS), 1, Bank.WithdrawMode.ITEM);
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_GLOVES), 1, Bank.WithdrawMode.ITEM);
