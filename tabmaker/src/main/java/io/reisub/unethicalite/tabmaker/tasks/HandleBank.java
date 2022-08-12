@@ -56,7 +56,7 @@ public class HandleBank extends BankTask {
       );
 
       Time.sleepTicksUntil(() -> Utils.isInRegion(Constants.CRAFTING_GUILD_REGION), 10);
-      Time.sleepTicks(2);
+      Time.sleepTick();
     }
 
     tabsMade += Inventory.getCount(true, i -> i.hasAction("Break"));
