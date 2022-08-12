@@ -38,6 +38,7 @@ import net.unethicalite.api.utils.MessageUtils;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Widgets;
 import net.unethicalite.client.Static;
+import org.slf4j.Logger;
 
 @Slf4j
 public abstract class TickScript extends Plugin implements KeyListener {
@@ -153,6 +154,10 @@ public abstract class TickScript extends Plugin implements KeyListener {
     if (event.getGameState() == GameState.LOGGED_IN) {
       lastLoginTick = Static.getClient().getTickCount();
     }
+  }
+
+  public Logger getLogger() {
+    return log;
   }
 
   public void setActivity(Activity activity) {
@@ -292,7 +297,7 @@ public abstract class TickScript extends Plugin implements KeyListener {
   protected void tick() {
     for (Task t : tasks) {
       if (t.validate()) {
-        log.info(t.getStatus());
+        getLogger().info(t.getStatus());
         setActivity(t.getActivity());
         t.execute();
         break;
