@@ -101,7 +101,16 @@ public class ChaosMovement {
     return openDoor(target, Sets.newHashSet());
   }
 
+  public static boolean openDoor(Locatable target, final int maxDistance) {
+    return openDoor(target, maxDistance, Sets.newHashSet());
+  }
+
   public static boolean openDoor(Locatable target, final Set<WorldPoint> ignoreLocations) {
+    return openDoor(target, Integer.MAX_VALUE, ignoreLocations);
+  }
+
+  public static boolean openDoor(Locatable target,
+      final int maxDistance, final Set<WorldPoint> ignoreLocations) {
     if (target == null) {
       return false;
     }
@@ -112,6 +121,7 @@ public class ChaosMovement {
         targetLocation,
         o -> o.getName().equals("Door")
             && o.hasAction("Open")
+            && o.distanceTo(targetLocation) <= maxDistance
             && !ignoreLocations.contains(o.getWorldLocation())
     );
 
@@ -122,7 +132,7 @@ public class ChaosMovement {
     if (!Reachable.isInteractable(door)) {
       ignoreLocations.add(door.getWorldLocation());
 
-      if (!openDoor(door, ignoreLocations)) {
+      if (!openDoor(door, maxDistance, ignoreLocations)) {
         return false;
       }
     }
