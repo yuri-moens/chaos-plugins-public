@@ -1,4 +1,4 @@
-version = "5.0.4"
+version = "5.0.5"
 
 project.extra["PluginName"] = "Chaos Grotesque Guardians"
 project.extra["PluginDescription"] = "Copy of Grotesque Guardians plugin from xKyle's repo"

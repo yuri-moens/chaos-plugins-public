@@ -1,4 +1,4 @@
-version = "5.0.1"
+version = "5.0.2"
 
 project.extra["PluginName"] = "Chaos Demonic Gorillas"
 project.extra["PluginDescription"] = "Copy of Demonic Gorilla plugin from xKyle's repo"

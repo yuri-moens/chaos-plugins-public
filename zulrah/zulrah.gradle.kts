@@ -1,4 +1,4 @@
-version = "5.0.7"
+version = "5.0.8"
 
 project.extra["PluginName"] = "Chaos Zulrah"
 project.extra["PluginDescription"] = "Copy of Zulrah plugin from xKyle's repo"

@@ -17,6 +17,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import org.pf4j.Extension;
+import org.slf4j.Logger;
 
 @PluginDescriptor(
     name = "Chaos ZMI",
@@ -27,7 +28,6 @@ import org.pf4j.Extension;
 @Extension
 public class Zmi extends TickScript {
   public static final WorldPoint NEAR_ALTAR = new WorldPoint(3058, 5579, 0);
-  public static final int OURANIA_CAVE_REGION = 12119;
   public static boolean pouchesAreEmpty;
   public static int lastEmpty;
   @Inject private Config config;
@@ -35,6 +35,11 @@ public class Zmi extends TickScript {
   @Provides
   public Config getConfig(ConfigManager configManager) {
     return configManager.getConfig(Config.class);
+  }
+
+  @Override
+  public Logger getLogger() {
+    return log;
   }
 
   @Override

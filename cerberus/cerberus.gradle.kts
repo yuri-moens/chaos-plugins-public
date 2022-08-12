@@ -1,4 +1,4 @@
-version = "5.0.2"
+version = "5.0.3"
 
 project.extra["PluginName"] = "Chaos Cerberus"
 project.extra["PluginDescription"] = "Copy of Cerberus plugin from xKyle's repo"
