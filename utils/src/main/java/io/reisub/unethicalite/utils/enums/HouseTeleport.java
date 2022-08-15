@@ -10,6 +10,7 @@ public enum HouseTeleport {
 
   // portals
   BARROWS("Barrows", 0),
+  CATHERBY("Catherby", 0),
   HARMONY_ISLAND("Harmony Island", 37589),
   TROLL_STRONGHOLD("Troll Stronghold", 33179),
   WEISS("Weiss", 37581),
