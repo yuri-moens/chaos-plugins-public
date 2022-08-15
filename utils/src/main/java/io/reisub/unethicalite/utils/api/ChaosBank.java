@@ -112,7 +112,7 @@ public class ChaosBank {
     }
 
     Time.sleepTick();
-    return hasAllItemsInEquipment(equipment);
+    return haveAllItemsInInventory(equipment);
   }
 
   public static boolean withdrawItems(ConfigList items) {
@@ -167,10 +167,10 @@ public class ChaosBank {
     }
 
     Time.sleepTick();
-    return hasAllItemsInInventory(items);
+    return haveAllItemsInEquipment(items);
   }
 
-  public static boolean hasAllItemsInInventory(ConfigList items) {
+  public static boolean haveAllItemsInEquipment(ConfigList items) {
     for (Map.Entry<String, Integer> item : items.getStrings().entrySet()) {
       if (item.getValue() <= 0) {
         if (!Inventory.contains(item.getKey())) {
@@ -198,7 +198,7 @@ public class ChaosBank {
     return true;
   }
 
-  public static boolean hasAllItemsInEquipment(ConfigList items) {
+  public static boolean haveAllItemsInInventory(ConfigList items) {
     for (String item : items.getStrings().keySet()) {
       if (!Equipment.contains(item)) {
         return false;
