@@ -6,6 +6,7 @@ import io.reisub.unethicalite.utils.Constants;
 import io.reisub.unethicalite.utils.api.ChaosBank;
 import io.reisub.unethicalite.utils.api.ChaosMovement;
 import io.reisub.unethicalite.utils.enums.HouseTeleport;
+import io.reisub.unethicalite.utils.enums.TeleportLocation;
 import io.reisub.unethicalite.utils.tasks.BankTask;
 import javax.inject.Inject;
 import net.runelite.api.Item;
@@ -13,7 +14,6 @@ import net.runelite.api.ItemID;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
-import net.unethicalite.api.items.Bank.WithdrawMode;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Dialog;
@@ -66,13 +66,8 @@ public class StartRun extends BankTask {
     if (config.goThroughHouse()
         || (!Bank.contains(Predicates.ids(Constants.DIGSITE_PENDANT_IDS))
         && config.goThroughHouseFallback())) {
-      if (config.useHouseTab()) {
-        Bank.withdraw(ItemID.TELEPORT_TO_HOUSE, 1, WithdrawMode.ITEM);
-      } else {
-        Bank.withdraw(ItemID.AIR_RUNE, 1, WithdrawMode.ITEM);
-        Bank.withdraw(ItemID.EARTH_RUNE, 1, WithdrawMode.ITEM);
-        Bank.withdraw(ItemID.LAW_RUNE, 1, WithdrawMode.ITEM);
-      }
+      TeleportLocation.HOUSE_TELEPORT.withdrawItems(
+          true, true, config.useHouseTab());
     } else {
       Bank.withdraw(Predicates.ids(Constants.DIGSITE_PENDANT_IDS), 1, Bank.WithdrawMode.ITEM);
     }
@@ -137,7 +132,8 @@ public class StartRun extends BankTask {
         && Inventory.contains(ItemID.CHISEL)
         && (Inventory.contains(Predicates.ids(Constants.DIGSITE_PENDANT_IDS))
         || (Inventory.contains(ItemID.AIR_RUNE) && Inventory.contains(ItemID.EARTH_RUNE)
-        && Inventory.contains(ItemID.LAW_RUNE)))
+        && Inventory.contains(ItemID.LAW_RUNE))
+        || Inventory.contains(Predicates.ids(Constants.CONSTRUCTION_CAPE_IDS)))
         && Inventory.getCount(config.logs().getId()) == 4
         && Inventory.getCount(true, Predicates.ids(Constants.BIRD_HOUSE_SEED_IDS)) == 40;
   }
