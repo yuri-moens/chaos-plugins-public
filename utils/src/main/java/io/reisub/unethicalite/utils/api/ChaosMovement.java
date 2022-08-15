@@ -151,7 +151,7 @@ public class ChaosMovement {
         || Equipment.contains(Predicates.ids(Constants.CONSTRUCTION_CAPE_IDS))) {
       Interact.interactWithInventoryOrEquipment(
           Constants.CONSTRUCTION_CAPE_IDS,
-          "Teleport",
+          "Tele to POH",
           null,
           -1
       );
