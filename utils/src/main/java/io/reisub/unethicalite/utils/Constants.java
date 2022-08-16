@@ -909,6 +909,25 @@ public class Constants {
       NpcID.LIZARDMAN_SHAMAN_8565
   );
 
+  public static final Set<Integer> CELL_IDS = ImmutableSet.of(
+      ItemID.WEAK_CELL,
+      ItemID.MEDIUM_CELL,
+      ItemID.STRONG_CELL,
+      ItemID.OVERCHARGED_CELL
+  );
+
+  public static final Set<Integer> INACTIVE_CELL_TILE_IDS = ImmutableSet.of(
+      ObjectID.INACTIVE_CELL_TILE,
+      ObjectID.INACTIVE_CELL_TILE_43739
+  );
+
+  public static final Set<Integer> ACTIVE_CELL_TILE_IDS = ImmutableSet.of(
+      ObjectID.WEAK_CELL_TILE,
+      ObjectID.MEDIUM_CELL_TILE,
+      ObjectID.STRONG_CELL_TILE,
+      ObjectID.OVERPOWERED_CELL_TILE
+  );
+
   public static final Set<Integer> PHARAOHS_SCEPTRE_IDS = ImmutableSet.of(
       ItemID.PHARAOHS_SCEPTRE,
       ItemID.PHARAOHS_SCEPTRE_9045,
