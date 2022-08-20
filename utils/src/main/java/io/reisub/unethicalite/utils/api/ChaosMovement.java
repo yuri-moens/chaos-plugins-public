@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import io.reisub.unethicalite.utils.Constants;
 import io.reisub.unethicalite.utils.enums.HouseTeleport;
 import io.reisub.unethicalite.utils.enums.HouseTeleport.TeleportItem;
+import java.util.Collection;
 import java.util.Set;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemID;
@@ -16,6 +17,7 @@ import net.runelite.api.widgets.Widget;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Rand;
 import net.unethicalite.api.commons.Time;
+import net.unethicalite.api.coords.RectangularArea;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.Combat;
@@ -349,5 +351,27 @@ public class ChaosMovement {
     }
 
     return Time.sleepTicksUntil(() -> !Static.getClient().isInInstancedRegion(), 10);
+  }
+
+  public static WorldPoint toInstance(final WorldPoint point) {
+    final Collection<WorldPoint> instancePoints = WorldPoint.toLocalInstance(
+        Static.getClient(),
+        point
+    );
+
+    return instancePoints.stream().findFirst().orElse(null);
+  }
+
+  public static RectangularArea toInstance(final RectangularArea area) {
+    final WorldPoint sw =
+        toInstance(new WorldPoint(area.getMinX(), area.getMinY(), area.getPlane()));
+    final WorldPoint ne =
+        toInstance(new WorldPoint(area.getMaxX(), area.getMaxY(), area.getPlane()));
+
+    if (sw == null || ne == null) {
+      return null;
+    }
+
+    return new RectangularArea(sw, ne);
   }
 }
