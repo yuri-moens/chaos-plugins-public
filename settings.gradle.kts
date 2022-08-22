@@ -49,10 +49,6 @@ include("utils")
 include("zmi")
 include("zulrah")
 
-if (File("./test").exists()) {
-    include("test")
-}
-
 for (project in rootProject.children) {
     project.apply {
         projectDir = file(name)
