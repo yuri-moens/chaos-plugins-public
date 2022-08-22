@@ -1,6 +1,7 @@
 package io.reisub.unethicalite.combathelper.misc;
 
 import io.reisub.unethicalite.combathelper.Helper;
+import io.reisub.unethicalite.utils.api.ChaosMovement;
 import java.awt.event.KeyEvent;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -114,10 +115,7 @@ public class MiscHelper extends Helper {
   }
 
   private void teleport() {
-    if (SpellBook.Standard.TELEPORT_TO_HOUSE.canCast()) {
-      SpellBook.Standard.TELEPORT_TO_HOUSE.cast();
-      Time.sleep(1500, 1800);
-    }
+    ChaosMovement.teleportToHouse();
   }
 
   public void castVengeance() {
