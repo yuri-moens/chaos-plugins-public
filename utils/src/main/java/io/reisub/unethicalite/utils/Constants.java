@@ -1055,6 +1055,12 @@ public class Constants {
       ItemID.GRACEFUL_LEGS_25080
   );
 
+  public static final Set<Integer> RING_OF_ENDURANCE_IDS = ImmutableSet.of(
+      ItemID.RING_OF_ENDURANCE,
+      ItemID.RING_OF_ENDURANCE_UNCHARGED,
+      ItemID.RING_OF_ENDURANCE_UNCHARGED_24844
+  );
+
   public static final Set<Integer> GRACEFUL_BOOTS = ImmutableSet.of(
       ItemID.GRACEFUL_BOOTS,
       ItemID.GRACEFUL_BOOTS_11861,

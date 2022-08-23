@@ -14,6 +14,7 @@ import net.runelite.api.ItemID;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.Bank.WithdrawMode;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.widgets.Dialog;
@@ -87,12 +88,17 @@ public class StartRun extends BankTask {
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_HOOD), 1, Bank.WithdrawMode.ITEM);
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_TOP), 1, Bank.WithdrawMode.ITEM);
       Bank.withdraw(Predicates.ids(Constants.GRACEFUL_LEGS), 1, Bank.WithdrawMode.ITEM);
+      Bank.withdraw(Predicates.ids(Constants.RING_OF_ENDURANCE_IDS), 1, WithdrawMode.ITEM);
     }
 
     close();
     Time.sleepTicksUntil(() -> !Bank.isOpen(), 5);
 
     Inventory.getAll(i -> i.getName().startsWith("Graceful")).forEach(i -> i.interact("Wear"));
+    final Item roe = Inventory.getFirst(Predicates.ids(Constants.RING_OF_ENDURANCE_IDS));
+    if (roe != null) {
+      roe.interact("Wear");
+    }
 
     if (!Time.sleepTicksUntil(this::hasEverything, 3)) {
       return;
