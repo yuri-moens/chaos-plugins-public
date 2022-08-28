@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Type {
   NORMAL("Tree", "Dying tree", "Dead tree", "Evergreen", "Jungle Tree"),
-  ACHEY("Achey tree"),
+  ACHEY("Achey Tree"),
   OAK("Oak tree"),
   WILLOW("Willow tree"),
   MAPLE("Maple tree"),
