@@ -931,6 +931,44 @@ public class Constants {
       ObjectID.OVERPOWERED_CELL_TILE
   );
 
+  public static final Set<Integer> SPECIAL_AXE_IDS = ImmutableSet.of(
+      ItemID.DRAGON_AXE,
+      ItemID.DRAGON_AXE_OR,
+      ItemID.INFERNAL_AXE,
+      ItemID.INFERNAL_AXE_OR,
+      ItemID.INFERNAL_AXE_UNCHARGED,
+      ItemID.INFERNAL_AXE_UNCHARGED_25371,
+      ItemID.CRYSTAL_AXE,
+      ItemID.CRYSTAL_AXE_23862,
+      ItemID.CRYSTAL_AXE_INACTIVE,
+      ItemID._3RD_AGE_AXE
+  );
+
+  public static final Set<Integer> SPECIAL_PICKAXE_IDS = ImmutableSet.of(
+      ItemID.DRAGON_PICKAXE,
+      ItemID.DRAGON_PICKAXE_OR,
+      ItemID.INFERNAL_PICKAXE,
+      ItemID.INFERNAL_PICKAXE_OR,
+      ItemID.INFERNAL_PICKAXE_UNCHARGED,
+      ItemID.INFERNAL_PICKAXE_UNCHARGED_25369,
+      ItemID.CRYSTAL_PICKAXE,
+      ItemID.CRYSTAL_PICKAXE_23863,
+      ItemID.CRYSTAL_PICKAXE_INACTIVE,
+      ItemID._3RD_AGE_PICKAXE
+  );
+
+  public static final Set<Integer> SPECIAL_HARPOON_IDS = ImmutableSet.of(
+      ItemID.DRAGON_HARPOON,
+      ItemID.DRAGON_HARPOON_OR,
+      ItemID.INFERNAL_HARPOON,
+      ItemID.INFERNAL_HARPOON_OR,
+      ItemID.INFERNAL_HARPOON_UNCHARGED,
+      ItemID.INFERNAL_HARPOON_UNCHARGED_25367,
+      ItemID.CRYSTAL_HARPOON,
+      ItemID.CRYSTAL_HARPOON_23864,
+      ItemID.CRYSTAL_HARPOON_INACTIVE
+  );
+
   public static final Set<Integer> PHARAOHS_SCEPTRE_IDS = ImmutableSet.of(
       ItemID.PHARAOHS_SCEPTRE,
       ItemID.PHARAOHS_SCEPTRE_9045,
