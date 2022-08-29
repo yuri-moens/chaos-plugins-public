@@ -111,7 +111,7 @@ public enum Course {
       new ObstacleArea(
           new WorldPoint(2753, 2742, 2), new WorldPoint(2752, 2741, 2), ObjectID.MONKEYBARS_15417),
       new ObstacleArea(
-          new WorldPoint(2747, 2741, 0), new WorldPoint(2746, 2741, 0), ObjectID.SKULL_SLOPE_15483),
+          new WorldPoint(2747, 2741, 0), new WorldPoint(2746, 2741, 0), ObjectID.ENTRY),
       new ObstacleArea(
           new WorldPoint(2735, 2726, 0), new WorldPoint(2754, 2742, 0), ObjectID.ROPE_15487),
       new ObstacleArea(
