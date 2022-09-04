@@ -1,5 +1,7 @@
+import ProjectVersions.rlVersion
+
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,39 +25,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "Chaos Plugins Public"
+version = "6.0.0"
 
-include("agility")
-include("alchemicalhydra")
-include("autodropper")
-include("bankpin")
-include("birdhouse")
-include("cerberus")
-include("cluepuzzlesolver")
-include("combathelper")
-include("cooking")
-include("demonicgorillas")
-include("enchanter")
-include("fletching")
-include("gauntletextended")
-include("glassblower")
-include("grotesqueguardians")
-include("plankmaker")
-include("shafter")
-include("shopper")
-include("smithing")
-include("spinner")
-include("tabmaker")
-include("utils")
-include("zmi")
-include("zulrah")
+project.extra["PluginName"] = "Chaos Gauntlet Extended"
+project.extra["PluginDescription"] = "Copy of Gauntlet Extended from xKyle's repo"
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+dependencies {
+    compileOnly(project(":utils"))
+}
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
+tasks {
+    jar {
+        manifest {
+            attributes(mapOf(
+                    "Plugin-Version" to project.version,
+                    "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
+                    "Plugin-Provider" to project.extra["PluginProvider"],
+                    "Plugin-Description" to project.extra["PluginDescription"],
+                    "Plugin-Dependencies" to
+                            arrayOf(
+                                    nameToId("Chaos Utils")
+                            ).joinToString(),
+                    "Plugin-License" to project.extra["PluginLicense"]
+            ))
+        }
     }
 }

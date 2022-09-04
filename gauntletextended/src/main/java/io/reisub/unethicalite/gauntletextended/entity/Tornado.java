@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 Owain van Brakel <https:github.com/Owain94>
+ * Copyright (c) 2020, dutta64 <https://github.com/dutta64>
+ * Copyright (c) 2019, ganom <https://github.com/Ganom>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -10,7 +11,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,39 +23,26 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "Chaos Plugins Public"
+package io.reisub.unethicalite.gauntletextended.entity;
 
-include("agility")
-include("alchemicalhydra")
-include("autodropper")
-include("bankpin")
-include("birdhouse")
-include("cerberus")
-include("cluepuzzlesolver")
-include("combathelper")
-include("cooking")
-include("demonicgorillas")
-include("enchanter")
-include("fletching")
-include("gauntletextended")
-include("glassblower")
-include("grotesqueguardians")
-include("plankmaker")
-include("shafter")
-include("shopper")
-include("smithing")
-include("spinner")
-include("tabmaker")
-include("utils")
-include("zmi")
-include("zulrah")
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.runelite.api.NPC;
 
-for (project in rootProject.children) {
-    project.apply {
-        projectDir = file(name)
-        buildFileName = "$name.gradle.kts"
+@RequiredArgsConstructor
+public class Tornado {
 
-        require(projectDir.isDirectory) { "Project '${project.path} must have a $projectDir directory" }
-        require(buildFile.isFile) { "Project '${project.path} must have a $buildFile build script" }
+  private static final int TICK_DURATION = 21;
+
+  @Getter
+  private int timeLeft = TICK_DURATION;
+
+  @Getter
+  private final NPC npc;
+
+  public void updateTimeLeft() {
+    if (timeLeft >= 0) {
+      timeLeft--;
     }
+  }
 }
