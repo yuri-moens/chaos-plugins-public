@@ -199,7 +199,7 @@ public class SwapHelper extends Helper {
       break;
     }
 
-    if (plugin.getLastTarget() != null) {
+    if (config.attackAfterSwap() && plugin.getLastTarget() != null) {
       GameThread.invoke(() -> plugin.getLastTarget().interact("Attack"));
     }
   }

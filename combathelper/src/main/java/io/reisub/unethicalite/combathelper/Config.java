@@ -152,6 +152,17 @@ public interface Config extends net.runelite.client.config.Config {
   }
 
   @ConfigItem(
+      keyName = "eatHotkey",
+      name = "Eat hotkey",
+      description = "Choose the eat hotkey.",
+      section = "eatConfig",
+      position = 8)
+  default Keybind eatHotkey() {
+    return new Keybind(KeyEvent.VK_E, InputEvent.SHIFT_DOWN_MASK);
+  }
+
+
+  @ConfigItem(
       keyName = "drinkPotions",
       name = "Drink potions",
       description = "Enable automatic drinking of potions.",
@@ -702,6 +713,26 @@ public interface Config extends net.runelite.client.config.Config {
   }
 
   @ConfigItem(
+      keyName = "hunleffPrayerFlick",
+      name = "Hunleff Auto Prayer Flick",
+      description = "Automatically swap prayers against the Hunleff",
+      section = "prayerConfig",
+      position = 318)
+  default boolean hunleffPrayerFlick() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "gauntletPrayerFlick",
+      name = "Gauntlet Auto Prayer Flick",
+      description = "Automatically swap prayers against the NPCs in the Gauntlet",
+      section = "prayerConfig",
+      position = 319)
+  default boolean gauntletPrayerFlick() {
+    return true;
+  }
+
+  @ConfigItem(
       keyName = "bones",
       name = "Bones",
       description = "Choose which bones to auto-bury.",
@@ -939,6 +970,26 @@ public interface Config extends net.runelite.client.config.Config {
       section = "swapConfig",
       position = 614)
   default boolean autoSwapGrotesqueGuardians() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "autoSwapHunleff",
+      name = "Auto swap Hunleff",
+      description = "Automatically swap sets against Hunleff",
+      section = "swapConfig",
+      position = 615)
+  default boolean autoSwapHunleff() {
+    return true;
+  }
+
+  @ConfigItem(
+      keyName = "attackAfterSwap",
+      name = "Attack after swap",
+      description = "Attack the last target after swapping gear",
+      section = "swapConfig",
+      position = 699)
+  default boolean attackAfterSwap() {
     return true;
   }
 

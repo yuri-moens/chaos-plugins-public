@@ -11,6 +11,7 @@ import io.reisub.unethicalite.combathelper.misc.MiscHelper;
 import io.reisub.unethicalite.combathelper.prayer.PrayerHelper;
 import io.reisub.unethicalite.combathelper.special.SpecialHelper;
 import io.reisub.unethicalite.combathelper.swap.SwapHelper;
+import io.reisub.unethicalite.gauntletextended.ChaosGauntletExtended;
 import io.reisub.unethicalite.grotesqueguardians.ChaosGrotesqueGuardians;
 import io.reisub.unethicalite.zulrah.ChaosZulrah;
 import java.util.ArrayList;
@@ -46,8 +47,9 @@ import org.pf4j.Extension;
 @PluginDependency(UnethicalitePlugin.class)
 @PluginDependency(ChaosAlchemicalHydra.class)
 @PluginDependency(ChaosCerberus.class)
-@PluginDependency(ChaosZulrah.class)
+@PluginDependency(ChaosGauntletExtended.class)
 @PluginDependency(ChaosGrotesqueGuardians.class)
+@PluginDependency(ChaosZulrah.class)
 @Slf4j
 @Extension
 public class CombatHelper extends Plugin {

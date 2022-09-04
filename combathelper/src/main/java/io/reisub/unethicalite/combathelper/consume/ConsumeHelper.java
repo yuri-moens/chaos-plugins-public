@@ -2,6 +2,7 @@ package io.reisub.unethicalite.combathelper.consume;
 
 import io.reisub.unethicalite.combathelper.Helper;
 import io.reisub.unethicalite.utils.Constants;
+import java.awt.event.KeyEvent;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -178,6 +179,19 @@ public class ConsumeHelper extends Helper {
         checkSkill(Skill.MAGIC);
         break;
       default:
+    }
+  }
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    if (config.eatHotkey().matches(e)) {
+      final Item food = Inventory.getFirst(i -> i.hasAction("Eat"));
+
+      if (food != null) {
+        food.interact("Eat");
+      }
+
+      e.consume();
     }
   }
 

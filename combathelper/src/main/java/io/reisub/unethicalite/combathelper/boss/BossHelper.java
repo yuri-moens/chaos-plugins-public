@@ -8,6 +8,7 @@ import io.reisub.unethicalite.cerberus.domain.Cerberus;
 import io.reisub.unethicalite.cerberus.domain.CerberusAttack;
 import io.reisub.unethicalite.combathelper.CombatHelper;
 import io.reisub.unethicalite.combathelper.Helper;
+import io.reisub.unethicalite.gauntletextended.ChaosGauntletExtended;
 import io.reisub.unethicalite.grotesqueguardians.ChaosGrotesqueGuardians;
 import io.reisub.unethicalite.grotesqueguardians.entity.Dusk;
 import io.reisub.unethicalite.utils.enums.ChaosPrayer;
@@ -16,28 +17,32 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.runelite.api.EquipmentInventorySlot;
+import net.runelite.api.HeadIcon;
+import net.runelite.api.Item;
+import net.runelite.api.NpcID;
 import net.runelite.api.Prayer;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ProjectileSpawned;
 import net.runelite.client.eventbus.Subscribe;
+import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Combat;
+import net.unethicalite.api.items.Equipment;
 
 @Singleton
 public class BossHelper extends Helper {
 
   @Inject
   private CombatHelper plugin;
-
   @Inject
   private ChaosAlchemicalHydra alchemicalHydraPlugin;
-
   @Inject
   private ChaosCerberus cerberusPlugin;
-
   @Inject
   private ChaosZulrah zulrahPlugin;
-
+  @Inject
+  private ChaosGauntletExtended gauntletPlugin;
   @Inject
   private ChaosGrotesqueGuardians grotesqueGuardiansPlugin;
 
@@ -63,6 +68,24 @@ public class BossHelper extends Helper {
 
     if (config.zulrahPrayerFlick() && !zulrahPlugin.getZulrahData().isEmpty()) {
       zulrahFlick();
+    }
+
+    if (config.hunleffPrayerFlick()
+        && gauntletPlugin.isInHunllef()
+        && gauntletPlugin.getHunllef() != null) {
+      hunleffFlick();
+    }
+
+    if (config.autoSwapHunleff()
+        && gauntletPlugin.isInHunllef()
+        && gauntletPlugin.getHunllef() != null) {
+      hunleffSwap();
+    }
+
+    if (config.gauntletPrayerFlick()
+        && gauntletPlugin.isInGauntlet()
+        && !gauntletPlugin.isInHunllef()) {
+      gauntletPrayerFlick();
     }
 
     if (config.autoSwapGrotesqueGuardians() && grotesqueGuardiansPlugin.isOnRoof()) {
@@ -205,6 +228,83 @@ public class BossHelper extends Helper {
         break;
       default:
         break;
+    }
+  }
+
+  private void hunleffFlick() {
+    final Prayer prayer = gauntletPlugin.getHunllef().getAttackPhase().getPrayer();
+
+    if (prayer == null) {
+      return;
+    }
+
+    switch (prayer) {
+      case PROTECT_FROM_MAGIC:
+        plugin.getPrayerHelper().setPrayer(ChaosPrayer.PROTECT_FROM_MAGIC, false);
+        break;
+      case PROTECT_FROM_MISSILES:
+        plugin.getPrayerHelper().setPrayer(ChaosPrayer.PROTECT_FROM_MISSILES, false);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private void hunleffSwap() {
+    final HeadIcon headIcon =
+        gauntletPlugin.getHunllef().getNpc().getComposition().getOverheadIcon();
+
+    if (headIcon == null) {
+      return;
+    }
+
+    final Item weapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);
+
+    if (weapon == null) {
+      return;
+    }
+
+    switch (headIcon) {
+      case MELEE:
+        if (weapon.getName().contains("halberd")) {
+          plugin.getSwapHelper()
+              .swap(true, false, WeaponStyle.RANGE, WeaponStyle.MAGIC);
+        }
+        break;
+      case RANGED:
+        if (weapon.getName().contains("bow")) {
+          plugin.getSwapHelper()
+              .swap(true, false, WeaponStyle.MELEE, WeaponStyle.MAGIC);
+        }
+        break;
+      case MAGIC:
+        if (weapon.getName().contains("staff")) {
+          plugin.getSwapHelper()
+              .swap(true, false, WeaponStyle.RANGE, WeaponStyle.MELEE);
+        }
+        break;
+      default:
+    }
+  }
+
+  private void gauntletPrayerFlick() {
+    if (Players.getLocal().getInteracting() == null) {
+      return;
+    }
+
+    final int targetId = Players.getLocal().getInteracting().getId();
+
+    switch (targetId) {
+      case NpcID.CRYSTALLINE_DRAGON:
+      case NpcID.CORRUPTED_DRAGON:
+        plugin.getPrayerHelper().setPrayer(ChaosPrayer.PROTECT_FROM_MAGIC, false);
+        break;
+      case NpcID.CRYSTALLINE_DARK_BEAST:
+      case NpcID.CORRUPTED_DARK_BEAST:
+        plugin.getPrayerHelper().setPrayer(ChaosPrayer.PROTECT_FROM_MISSILES, false);
+        break;
+      default:
+        plugin.getPrayerHelper().setPrayer(ChaosPrayer.PROTECT_FROM_MELEE, false);
     }
   }
 

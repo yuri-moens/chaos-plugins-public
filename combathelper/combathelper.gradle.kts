@@ -1,4 +1,4 @@
-version = "1.9.6"
+version = "1.10.0"
 
 project.extra["PluginName"] = "Chaos Combat Helper"
 project.extra["PluginDescription"] = "Various utilities to make combat easier"
@@ -8,6 +8,7 @@ dependencies {
     compileOnly(project(":alchemicalhydra"))
     compileOnly(project(":cerberus"))
     compileOnly(project(":demonicgorillas"))
+    compileOnly(project(":gauntletextended"))
     compileOnly(project(":grotesqueguardians"))
     compileOnly(project(":zulrah"))
 }
@@ -27,6 +28,7 @@ tasks {
                                             nameToId("Chaos Alchemical Hydra"),
                                             nameToId("Chaos Cerberus"),
                                             nameToId("Chaos Demonic Gorillas"),
+                                            nameToId("Chaos Gauntlet Extended"),
                                             nameToId("Chaos Grotesque Guardians"),
                                             nameToId("Chaos Zulrah")
                                     ).joinToString(),
