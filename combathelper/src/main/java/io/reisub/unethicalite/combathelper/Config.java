@@ -984,6 +984,17 @@ public interface Config extends net.runelite.client.config.Config {
   }
 
   @ConfigItem(
+      keyName = "hunleff51",
+      name = "5:1 method",
+      description = "Enable to use the 5:1 method at Hunleff (5 attacks with ranged, "
+          + "1 with melee/magic). Will fall back to normal method if you don't have a staff.",
+      section = "swapConfig",
+      position = 616)
+  default boolean hunleff51() {
+    return false;
+  }
+
+  @ConfigItem(
       keyName = "attackAfterSwap",
       name = "Attack after swap",
       description = "Attack the last target after swapping gear",

@@ -501,7 +501,7 @@ public class ChaosGauntletExtended extends Plugin {
     overlayTimer.onPlayerDeath();
   }
 
-  @Subscribe
+  @Subscribe(priority = 100)
   private void onAnimationChanged(final AnimationChanged event) {
     if (!isHunllefVarbitSet() || hunllef == null) {
       return;

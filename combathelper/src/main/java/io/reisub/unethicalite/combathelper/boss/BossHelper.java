@@ -26,9 +26,11 @@ import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ProjectileSpawned;
 import net.runelite.client.eventbus.Subscribe;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Combat;
 import net.unethicalite.api.items.Equipment;
+import net.unethicalite.api.items.Inventory;
 
 @Singleton
 public class BossHelper extends Helper {
@@ -260,30 +262,61 @@ public class BossHelper extends Helper {
 
     final Item weapon = Equipment.fromSlot(EquipmentInventorySlot.WEAPON);
 
-    if (weapon == null) {
-      return;
-    }
+    if (config.hunleff51()
+        && (Equipment.contains(Predicates.nameContains("bow"))
+        || Inventory.contains(Predicates.nameContains("bow")))
+        && (Equipment.contains(Predicates.nameContains("staff"))
+        || Inventory.contains(Predicates.nameContains("staff")))) {
+      // we have bow and staff, doing 5:1 method
+      final int playerAttackCount = gauntletPlugin.getHunllef().getPlayerAttackCount();
 
-    switch (headIcon) {
-      case MELEE:
-        if (weapon.getName().contains("halberd")) {
-          plugin.getSwapHelper()
-              .swap(true, false, WeaponStyle.RANGE, WeaponStyle.MAGIC);
+      if (Equipment.contains(Predicates.nameContains("bow"))
+          && playerAttackCount == 1) {
+        switch (headIcon) {
+          case MELEE:
+            Inventory.getFirst(Predicates.nameContains("staff")).interact("Wield");
+            break;
+          case MAGIC:
+            final Item halberd = Inventory.getFirst(Predicates.nameContains("halberd"));
+
+            if (halberd == null) {
+              Equipment.getFirst(Predicates.nameContains("bow")).interact("Remove");
+            } else {
+              halberd.interact("Wield");
+            }
+            break;
+          default:
         }
-        break;
-      case RANGED:
-        if (weapon.getName().contains("bow")) {
-          plugin.getSwapHelper()
-              .swap(true, false, WeaponStyle.MELEE, WeaponStyle.MAGIC);
-        }
-        break;
-      case MAGIC:
-        if (weapon.getName().contains("staff")) {
-          plugin.getSwapHelper()
-              .swap(true, false, WeaponStyle.RANGE, WeaponStyle.MELEE);
-        }
-        break;
-      default:
+      } else if (!Equipment.contains(Predicates.nameContains("bow"))
+          && playerAttackCount != 1) {
+        Inventory.getFirst(Predicates.nameContains("bow")).interact("Wield");
+      }
+    } else {
+      if (weapon == null) {
+        return;
+      }
+
+      switch (headIcon) {
+        case MELEE:
+          if (weapon.getName().contains("halberd")) {
+            plugin.getSwapHelper()
+                .swap(true, false, WeaponStyle.RANGE, WeaponStyle.MAGIC);
+          }
+          break;
+        case RANGED:
+          if (weapon.getName().contains("bow")) {
+            plugin.getSwapHelper()
+                .swap(true, false, WeaponStyle.MELEE, WeaponStyle.MAGIC);
+          }
+          break;
+        case MAGIC:
+          if (weapon.getName().contains("staff")) {
+            plugin.getSwapHelper()
+                .swap(true, false, WeaponStyle.RANGE, WeaponStyle.MELEE);
+          }
+          break;
+        default:
+      }
     }
   }
 
